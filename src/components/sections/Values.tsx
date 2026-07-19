@@ -1,5 +1,5 @@
 import { ShieldCheck, Handshake, BadgeCheck, Eye, LifeBuoy, type LucideIcon } from "lucide-react";
-import { Section, SectionLabel, GhostWord } from "@/components/ui";
+import { Section, SectionLabel, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 
 interface Value {
   title: string;
@@ -30,22 +30,25 @@ export function Values() {
   return (
     <Section bg="white" className="relative overflow-hidden">
       <GhostWord>WHY TRESTO</GhostWord>
-      <SectionLabel>Why Tresto</SectionLabel>
-      <h2 className="mt-2 text-section-title text-ink">What we stand for</h2>
+      <Reveal delay={REVEAL_DELAY.eyebrow}>
+        <SectionLabel>Why Tresto</SectionLabel>
+      </Reveal>
+      <Reveal delay={REVEAL_DELAY.heading}>
+        <h2 className="mt-2 text-section-title text-ink">What we stand for</h2>
+      </Reveal>
 
       <div className="mt-10 grid grid-cols-2 gap-6 lg:grid-cols-5">
-        {values.map(({ title, description, icon: Icon }) => (
-          <div
-            key={title}
-            className="gradient-border-card group rounded-card border-[0.5px] border-border bg-white p-5 text-center transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0"
-          >
-            <span className="mx-auto flex h-[46px] w-[46px] items-center justify-center rounded-chip bg-lilac-card text-violet transition-all duration-300 group-hover:scale-105 group-hover:bg-violet group-hover:text-white motion-reduce:transition-none motion-reduce:group-hover:scale-100">
-              <Icon className="h-5 w-5" strokeWidth={1.75} />
-            </span>
+        {values.map(({ title, description, icon: Icon }, index) => (
+          <Reveal key={title} delay={REVEAL_DELAY.gridBase + index * REVEAL_DELAY.gridStep}>
+            <div className="gradient-border-card group rounded-card border-[0.5px] border-border bg-white p-5 text-center transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+              <span className="mx-auto flex h-[46px] w-[46px] items-center justify-center rounded-chip bg-lilac-card text-violet transition-all duration-300 group-hover:scale-105 group-hover:bg-violet group-hover:text-white motion-reduce:transition-none motion-reduce:group-hover:scale-100">
+                <Icon className="h-5 w-5" strokeWidth={1.75} />
+              </span>
 
-            <p className="mt-4 font-display font-bold text-ink">{title}</p>
-            <p className="mt-1 text-sm text-text-muted">{description}</p>
-          </div>
+              <p className="mt-4 font-display font-bold text-ink">{title}</p>
+              <p className="mt-1 text-sm text-text-muted">{description}</p>
+            </div>
+          </Reveal>
         ))}
       </div>
     </Section>

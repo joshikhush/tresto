@@ -292,11 +292,7 @@
 }
 .svc-h2 { position: relative; font-family: var(--font-display), sans-serif; font-size: 40px; font-weight: 800; line-height: 1.14; color: #1A1A2E; }
 .svc-p { position: relative; color: #6B7280; font-size: 15px; line-height: 1.7; margin-top: 18px; max-width: 400px; }
-.svc-btn {
-  position: relative; margin-top: 24px; display: inline-block; cursor: pointer;
-  background: #1A1A2E; color: #fff; font-family: var(--font-display), sans-serif; font-weight: 600;
-  padding: 12px 26px; border-radius: 26px;
-}
+/* .svc-btn removed — the CTA now renders via the shared ButtonPrimary component. */
 .svc-prog { margin-top: 26px; display: flex; gap: 8px; }
 .svc-prog i { width: 26px; height: 4px; border-radius: 2px; background: #EDE9FE; transition: .3s; }
 .svc-prog i.on { background: #5B21B6; }
@@ -342,4 +338,592 @@
   .svc-pin { position: static; height: auto; }
   .svc-stack { height: auto; overflow: visible; display: flex; flex-direction: column; gap: 16px; }
   .svc-card { position: static; height: auto; transform: none !important; }
+}
+
+/* ===== Case Studies (S9) ===== */
+.cs-section { background: #F5F3FF; }
+.cs-container { max-width: 1080px; margin: 0 auto; padding: 70px 30px; }
+.cs-eyebrow { font-size: 12px; font-weight: 700; text-transform: uppercase; color: #5B21B6; }
+.cs-heading { font-family: var(--font-display), sans-serif; font-size: 40px; font-weight: 800; margin: 8px 0 40px; }
+
+.cs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+@media (max-width: 700px) {
+  .cs-grid { grid-template-columns: 1fr; }
+}
+
+/* Entrance: opacity/transform carry --cs-delay (set inline per card, 110ms
+   apart) so the stagger only affects the one-time reveal. Once .cs-in is
+   applied, this whole `transition` declaration is superseded by
+   .cs-card.cs-in's own (higher-specificity, zero-delay) declaration below,
+   so every subsequent hover/defocus transform change is instant — the
+   entrance delay can't leak into later interactions. */
+.cs-card {
+  position: relative;
+  display: block;
+  height: 340px;
+  border-radius: 18px;
+  overflow: hidden;
+  border: 1px solid #E5E7EB;
+  background: #fff;
+  text-decoration: none;
+  opacity: 0;
+  transform: translateY(26px) scale(.97);
+  transition:
+    opacity .65s cubic-bezier(.34, 1.45, .64, 1) var(--cs-delay, 0ms),
+    transform .65s cubic-bezier(.34, 1.45, .64, 1) var(--cs-delay, 0ms);
+}
+
+.cs-card.cs-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition:
+    opacity .3s cubic-bezier(.34, 1.45, .64, 1),
+    transform .3s cubic-bezier(.34, 1.45, .64, 1),
+    border-color .3s cubic-bezier(.34, 1.45, .64, 1),
+    box-shadow .3s cubic-bezier(.34, 1.45, .64, 1);
+}
+
+.cs-card:hover {
+  transform: scale(1.03);
+  border-color: #d8d2f0;
+  box-shadow: 0 24px 56px rgba(91, 33, 182, .28), 0 6px 18px rgba(245, 197, 24, .14);
+}
+
+/* Grid-level focus mode: hovering the grid dims/shrinks every card except
+   the one actually under the cursor. */
+.cs-grid:hover .cs-card:not(:hover) {
+  transform: scale(.97);
+  opacity: .72;
+}
+
+.cs-img {
+  object-fit: cover;
+  transition: transform .6s cubic-bezier(.34, 1.45, .64, 1);
+}
+.cs-card:hover .cs-img {
+  transform: scale(1.06);
+}
+.cs-img-placeholder {
+  position: absolute;
+  inset: 0;
+  background: #EDE9FE;
+}
+
+/* Bottom scrim, sized to its own content (not the full card) — sliding it
+   down 58% of that (much shorter) height tucks everything except the top
+   sliver — the tag chip + title — below the card's own overflow:hidden
+   clip, matching "only the chip + title peek" at rest. */
+.cs-overlay {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 26px;
+  background: linear-gradient(to top, rgba(26, 26, 46, .92) 30%, rgba(26, 26, 46, .55) 70%, transparent);
+  transform: translateY(58%);
+  transition: transform .5s cubic-bezier(.34, 1.45, .64, 1);
+}
+.cs-card:hover .cs-overlay {
+  transform: translateY(0);
+}
+
+.cs-tag {
+  display: inline-block;
+  background: #F5C518;
+  color: #1A1A2E;
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.cs-title {
+  margin: 10px 0 0;
+  color: #fff;
+  font-family: var(--font-display), sans-serif;
+  font-size: 21px;
+  font-weight: 800;
+}
+
+.cs-desc {
+  margin: 8px 0 0;
+  color: #CBD5E1;
+  font-size: 13px;
+  line-height: 1.5;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .3s cubic-bezier(.34, 1.45, .64, 1), transform .3s cubic-bezier(.34, 1.45, .64, 1);
+}
+.cs-card:hover .cs-desc {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .06s;
+}
+
+.cs-meta {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity .3s cubic-bezier(.34, 1.45, .64, 1), transform .3s cubic-bezier(.34, 1.45, .64, 1);
+}
+.cs-card:hover .cs-meta {
+  opacity: 1;
+  transform: translateY(0);
+  transition-delay: .12s;
+}
+
+.cs-chip {
+  background: rgba(255, 255, 255, .14);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.cs-view {
+  margin-left: auto;
+  color: #F5C518;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.cs-button-row {
+  margin-top: 40px;
+  display: flex;
+  justify-content: center;
+}
+
+/* .cs-btn / .cs-btn-arrow removed — "See all work" now renders via the
+   shared ButtonSecondary component. */
+
+/* Mobile: no hover on touch, so the overlay/description/meta are just
+   permanently in their "revealed" state instead of gated behind :hover. */
+@media (max-width: 700px) {
+  .cs-overlay { transform: translateY(0); }
+  .cs-desc,
+  .cs-meta { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cs-card,
+  .cs-card.cs-in,
+  .cs-overlay,
+  .cs-desc,
+  .cs-meta,
+  .cs-img {
+    transition: none !important;
+  }
+}
+
+/* ===== Testimonials (S12) — scroll-driven pinned stage =====
+   .tst-quote-stage and .tst-meta-stage are the real grid children (one per
+   column) — each is `position: relative; min-width: 0; overflow: hidden`,
+   so the `position: absolute; inset: 0` slides nested inside them size
+   against THAT column only. (An earlier version tried to skip these
+   wrappers by putting `grid-column` directly on the individual slides —
+   in theory a `position: absolute` grid item with explicit placement
+   should resolve `inset` against its assigned grid area, but that did not
+   hold up in practice, and the slides rendered at close to the full stage
+   width instead of their column's width. Real wrapper elements are the
+   robust fix.) Each wrapper holds all 3 of that column's slides stacked on
+   top of each other via `inset: 0`.
+
+   The DOM is still [stage-of-3-quotes, stage-of-3-metas], which would
+   naturally fall back to "all quotes, then all metas" once the grid is
+   gone — instead, the fallback below turns both wrappers into
+   `display: contents` (promoting their slide children to be direct flex
+   items of .tst-stage) and each slide carries an inline `order`
+   (`quote_i = 2i`, `meta_i = 2i+1`, set in Testimonials.tsx) so the
+   fallback still pairs each quote with its own meta card, without the
+   pinned-mode DOM needing to be interleaved. */
+.tst-section {
+  position: relative;
+  height: 140vh;
+  padding: 0 30px;
+}
+
+.tst-stage {
+  position: sticky;
+  top: max(14vh, 100px);
+  max-width: 1200px;
+  margin: 0 auto;
+  border-radius: 26px;
+  padding: 44px;
+  overflow: hidden;
+  background: linear-gradient(150deg, #F5F3FF, #FDF2F8);
+  display: grid;
+  grid-template-columns: 1.3fr .7fr;
+  gap: 36px;
+  align-items: center;
+}
+
+.tst-ambient {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: .55;
+  transition: background 1s;
+  pointer-events: none;
+}
+.tst-ambient-0 { background: radial-gradient(500px circle at 80% 10%, rgba(91, 33, 182, .16), transparent 60%); }
+.tst-ambient-1 { background: radial-gradient(500px circle at 20% 90%, rgba(37, 99, 235, .15), transparent 60%); }
+.tst-ambient-2 { background: radial-gradient(500px circle at 85% 85%, rgba(245, 197, 24, .16), transparent 60%); }
+
+.tst-eyebrow {
+  position: absolute;
+  top: 22px;
+  left: 44px;
+  z-index: 1;
+  font-size: 11.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #5B21B6;
+}
+
+.tst-progress {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1;
+  display: flex;
+  gap: 8px;
+}
+.tst-segment {
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(91, 33, 182, .14);
+  overflow: hidden;
+}
+.tst-segment-fill {
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #5B21B6, #F5C518);
+}
+
+.tst-quote-stage,
+.tst-meta-stage {
+  position: relative;
+  min-width: 0;
+  min-height: 230px;
+  overflow: hidden;
+  z-index: 1;
+}
+.tst-quote-stage { grid-column: 1; }
+.tst-meta-stage { grid-column: 2; }
+
+.tst-quote-slide,
+.tst-meta-slide {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  opacity: 0;
+  transform: scale(.93);
+  filter: blur(6px);
+  transition:
+    opacity .5s cubic-bezier(.22, 1, .36, 1),
+    transform .5s cubic-bezier(.22, 1, .36, 1),
+    filter .5s cubic-bezier(.22, 1, .36, 1);
+  pointer-events: none;
+}
+.tst-meta-slide { gap: 12px; }
+
+.tst-quote-slide.tst-active,
+.tst-meta-slide.tst-active {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  pointer-events: auto;
+}
+
+/* Independent per-element stagger inside an active slide — each of these
+   four elements starts from this same rest state and settles on its own
+   delay once its parent slide activates. */
+.tst-quote,
+.tst-glass,
+.tst-tag,
+.tst-metric {
+  opacity: 0;
+  transform: translateY(14px) scale(.98);
+  filter: blur(4px);
+  transition:
+    opacity .55s cubic-bezier(.34, 1.45, .64, 1),
+    transform .55s cubic-bezier(.34, 1.45, .64, 1),
+    filter .55s cubic-bezier(.34, 1.45, .64, 1);
+}
+
+.tst-quote {
+  font-family: var(--font-display), sans-serif;
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 800;
+  line-height: 1.48;
+  color: #1A1A2E;
+  max-width: 100%;
+}
+.tst-quote-slide.tst-active .tst-quote {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition-delay: .02s;
+}
+
+.tst-glass {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255, 255, 255, .75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, .9);
+  border-radius: 16px;
+  padding: 18px;
+}
+.tst-meta-slide.tst-active .tst-glass {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition-delay: .09s;
+}
+
+.tst-avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #5B21B6, #A78BFA);
+  color: #fff;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.tst-name {
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: #1A1A2E;
+}
+
+.tst-role {
+  margin-top: 2px;
+  font-size: 11.5px;
+  color: #9CA3AF;
+}
+
+.tst-tag {
+  align-self: flex-start;
+  display: inline-block;
+  background: #EDE9FE;
+  color: #5B21B6;
+  font-size: 10.5px;
+  font-weight: 700;
+  text-transform: uppercase;
+  border-radius: 12px;
+  padding: 4px 10px;
+}
+.tst-meta-slide.tst-active .tst-tag {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition-delay: .16s;
+}
+
+.tst-metric {
+  align-self: flex-start;
+  display: inline-block;
+  background: rgba(245, 197, 24, .16);
+  color: #8a6d00;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 11.5px;
+  border-radius: 14px;
+  padding: 4px 10px;
+}
+.tst-meta-slide.tst-active .tst-metric {
+  opacity: 1;
+  transform: none;
+  filter: none;
+  transition-delay: .23s;
+}
+
+/* No pin below 760px or under reduced motion: plain static stacked list,
+   each quote immediately followed by its own meta card — no transforms.
+   Pure CSS override, not a JS-branched render, so there's no hydration
+   mismatch. .tst-quote-stage/.tst-meta-stage collapse to `display:
+   contents`, promoting their slide children to be direct flex items of
+   .tst-stage; each slide's inline `order` (set in Testimonials.tsx) then
+   interleaves them into paired quote/meta order regardless of the
+   pinned-mode DOM grouping. */
+@media (max-width: 760px), (prefers-reduced-motion: reduce) {
+  .tst-section {
+    height: auto;
+  }
+  .tst-stage {
+    position: static;
+    top: auto;
+    max-width: none;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .tst-ambient,
+  .tst-progress {
+    display: none;
+  }
+  .tst-quote-stage,
+  .tst-meta-stage {
+    display: contents;
+  }
+  .tst-quote-slide,
+  .tst-meta-slide {
+    position: static;
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+    pointer-events: auto;
+  }
+  /* Tight gap within a pair (meta's margin-top), loose gap between pairs
+     (meta's margin-bottom). Flex items don't collapse margins against each
+     other, but one side of every adjacent pair is 0 here, so the visible
+     gap is the same as collapsed margins would give either way. */
+  .tst-meta-slide {
+    margin-top: 12px;
+    margin-bottom: 32px;
+  }
+  .tst-quote,
+  .tst-glass,
+  .tst-tag,
+  .tst-metric {
+    opacity: 1;
+    transform: none;
+    filter: none;
+    transition: none;
+  }
+}
+
+/* ===== Discovery Call CTA — component-scoped design tokens =====
+   Deliberately a separate palette from the site's own brand tokens above
+   (--color-violet, --color-ink, etc. in @theme) — this section uses a
+   dedicated dark/indigo-violet-pink scheme per its own spec, not the site's
+   violet/gold brand colors. These are plain (non-`--color-*`) custom
+   properties, so Tailwind's utility generator doesn't pick them up as
+   theme colors and they can't collide with @theme's `--color-violet` (a
+   different property name, and a different color entirely: #5B21B6 there
+   vs #9B5CF6 here) — consumed only via arbitrary-value syntax, e.g.
+   `bg-[var(--bg-deep)]`, scoped to DiscoveryCallCTA.tsx.
+
+   --indigo / --violet / --pink / --gradient-main additionally back the
+   site-wide ButtonPrimary/ButtonSecondary components (components/ui) —
+   they're the one pair of shared tokens in this block that outgrew "DCTA
+   only", so treat them as the site's canonical button palette. */
+:root {
+  --bg-deep: #0A0714;
+  --bg-card: #17102B;
+  --card-line: rgba(196, 181, 253, 0.10);
+  --indigo: #6D5AE6;
+  --violet: #9B5CF6;
+  --pink: #EC4899;
+  --text-hi: #F6F3FF;
+  --text-mid: #B9AEDD;
+  --text-low: #7B7099;
+  --gradient-main: linear-gradient(135deg, #6D5AE6 0%, #9B5CF6 55%, #EC4899 100%);
+}
+
+/* ===== FAQ Section — component-scoped design tokens =====
+   Same "new design language" as the Discovery Call CTA block above, but a
+   fully separate prefixed set (--faq-*) rather than reusing those tokens
+   directly. Several names would otherwise collide: --bg-card, --text-hi
+   and --text-mid need DIFFERENT values here (FAQ is a light card on a
+   light page; DCTA is a dark card on a dark page), and :root custom
+   properties are global — redeclaring the bare name in a second :root
+   block doesn't scope to this component, it overwrites the first
+   declaration site-wide. Prefixing avoids that, even for the values
+   (indigo/violet/pink/gradient-main) that happen to be identical today. */
+:root {
+  --faq-bg-page: #F3EFFC;
+  --faq-bg-card: #FFFFFF;
+  --faq-border: rgba(23, 17, 42, 0.07);
+  --faq-border-strong: rgba(23, 17, 42, 0.13);
+  --faq-text-hi: #161020;
+  --faq-text-mid: #6E6690;
+  --faq-indigo: #6D5AE6;
+  --faq-violet: #9B5CF6;
+  --faq-pink: #EC4899;
+  --faq-gradient-main: linear-gradient(135deg, #6D5AE6 0%, #9B5CF6 55%, #EC4899 100%);
+  --faq-shadow-rest: 0 1px 2px rgba(30, 20, 60, 0.04), 0 6px 20px -14px rgba(76, 29, 149, 0.10);
+  --faq-shadow-open: 0 16px 36px -14px rgba(109, 90, 230, 0.28);
+}
+
+/* ===== Contact Section — component-scoped design tokens =====
+   Same note as the FAQ block above: this is its own fully prefixed set
+   (contact dash prefixed names) rather than reusing the FAQ or DCTA
+   tokens, even though several values here (bg page, indigo, violet,
+   pink, gradient main, shadow rest) are identical to the FAQ set today
+   — keeping every component's tokens self-contained avoids one
+   accidentally changing when another is edited later. If this light
+   theme trio of tokens keeps recurring across future components,
+   consolidating into one shared set would be a reasonable follow up —
+   not done here to keep this change scoped to Contact only. */
+:root {
+  --contact-bg-page: #F3EFFC;
+  --contact-surface-offwhite: #FDFCFF;
+  --contact-surface-lavender-2: #F6F2FE;
+  --contact-bg-card: #FFFFFF;
+  --contact-border: rgba(23, 17, 42, 0.07);
+  --contact-text-hi: #161020;
+  --contact-text-mid: #6E6690;
+  --contact-text-low: #9B93B8;
+  --contact-indigo: #6D5AE6;
+  --contact-violet: #9B5CF6;
+  --contact-pink: #EC4899;
+  --contact-green: #22C55E;
+  --contact-gradient-main: linear-gradient(135deg, #6D5AE6 0%, #9B5CF6 55%, #EC4899 100%);
+  --contact-shadow-rest: 0 1px 2px rgba(30, 20, 60, 0.04), 0 6px 20px -14px rgba(76, 29, 149, 0.10);
+  --contact-shadow-lift: 0 24px 54px -18px rgba(109, 90, 230, 0.32);
+}
+
+/* Mesh background drift — three radial gradients on one element, their
+   shared background-position nudged a few percentage points and back over
+   an 11s loop. Kept deliberately subtle per spec ("if in doubt, reduce the
+   movement distance"). */
+@keyframes contact-mesh-drift {
+  0%,
+  100% {
+    background-position: 25% 30%, 75% 25%, 50% 85%;
+  }
+  50% {
+    background-position: 29% 26%, 71% 29%, 46% 81%;
+  }
+}
+
+.contact-mesh {
+  background-color: var(--contact-surface-lavender-2);
+  background-image:
+    radial-gradient(circle, rgba(109, 90, 230, 0.36), transparent 60%),
+    radial-gradient(circle, rgba(236, 72, 153, 0.28), transparent 60%),
+    radial-gradient(circle, rgba(155, 92, 246, 0.32), transparent 60%);
+  background-repeat: no-repeat;
+  background-position: 25% 30%, 75% 25%, 50% 85%;
+  background-size: 130% 130%;
+  animation: contact-mesh-drift 11s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contact-mesh {
+    animation: none;
+  }
 }

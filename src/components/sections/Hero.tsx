@@ -2,7 +2,7 @@
 
 import { useRef, type MouseEvent as ReactMouseEvent } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Section, SectionLabel, Button } from "@/components/ui";
+import { Section, SectionLabel, ButtonPrimary, ButtonSecondary } from "@/components/ui";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import type { HeroContent } from "@/types";
 
@@ -108,12 +108,10 @@ export function Hero() {
             </ul>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <Button variant="primary" href={hero.primaryCta.href}>
-                {hero.primaryCta.label}
-              </Button>
-              <Button variant="ghost" href={hero.secondaryCta.href}>
+              <ButtonPrimary href={hero.primaryCta.href}>{hero.primaryCta.label}</ButtonPrimary>
+              <ButtonSecondary href={hero.secondaryCta.href} tone="on-dark">
                 {hero.secondaryCta.label}
-              </Button>
+              </ButtonSecondary>
             </div>
           </motion.div>
         </div>

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, useInView } from "framer-motion";
 import { Briefcase, Clock, Layers, LifeBuoy, Smile, type LucideIcon } from "lucide-react";
-import { Section, SectionLabel, TodoBadge, GhostWord } from "@/components/ui";
+import { Section, SectionLabel, TodoBadge, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
@@ -97,15 +97,21 @@ export function Stats() {
     <Section bg="lilac-50" className="relative overflow-hidden">
       <GhostWord>WHO WE ARE</GhostWord>
       <div className="mx-auto max-w-2xl text-center">
-        <SectionLabel>Who we are</SectionLabel>
-        <h2 className="mt-2 text-section-title text-ink">
-          A trusted technology partner for digital-first businesses
-        </h2>
+        <Reveal delay={REVEAL_DELAY.eyebrow}>
+          <SectionLabel>Who we are</SectionLabel>
+        </Reveal>
+        <Reveal delay={REVEAL_DELAY.heading}>
+          <h2 className="mt-2 text-section-title text-ink">
+            A trusted technology partner for digital-first businesses
+          </h2>
+        </Reveal>
       </div>
 
       <div className="mt-12 grid grid-cols-2 gap-y-8 sm:grid-cols-3 lg:grid-cols-5">
         {stats.map((stat, index) => (
-          <StatColumn key={stat.label} {...stat} index={index} />
+          <Reveal key={stat.label} delay={REVEAL_DELAY.gridBase + index * REVEAL_DELAY.gridStep}>
+            <StatColumn {...stat} index={index} />
+          </Reveal>
         ))}
       </div>
     </Section>

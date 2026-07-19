@@ -20,7 +20,7 @@ import {
   Workflow,
   type LucideIcon,
 } from "lucide-react";
-import { Section, SectionLabel, GhostWord } from "@/components/ui";
+import { Section, SectionLabel, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 
 interface Tool {
@@ -115,12 +115,18 @@ export function TechStack() {
 
       <div className="grid grid-cols-1 items-center gap-10 min-[860px]:grid-cols-[1fr_1.2fr] min-[860px]:gap-[60px]">
         <div>
-          <SectionLabel>Our tech stack</SectionLabel>
-          <h2 className="mt-2 text-section-title text-ink">Tools we actually build with</h2>
-          <p className="mt-3 max-w-md text-sm text-text-muted">
-            The languages, frameworks and platforms we reach for on almost every engagement — hover the columns
-            to pause and take a closer look.
-          </p>
+          <Reveal delay={REVEAL_DELAY.eyebrow}>
+            <SectionLabel>Our tech stack</SectionLabel>
+          </Reveal>
+          <Reveal delay={REVEAL_DELAY.heading}>
+            <h2 className="mt-2 text-section-title text-ink">Tools we actually build with</h2>
+          </Reveal>
+          <Reveal delay={REVEAL_DELAY.paragraph}>
+            <p className="mt-3 max-w-md text-sm text-text-muted">
+              The languages, frameworks and platforms we reach for on almost every engagement — hover the columns
+              to pause and take a closer look.
+            </p>
+          </Reveal>
         </div>
 
         <div

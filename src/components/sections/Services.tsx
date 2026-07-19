@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
+import { Reveal, REVEAL_DELAY, ButtonPrimary } from "@/components/ui";
 
 const CARD_H = 240; // must match .svc-card height in CSS
 const GAP = 18;     // visible gap between the active card and the peeking one
@@ -78,16 +79,22 @@ export function Services() {
       <div className="svc-pin">
         <div className="svc-left">
           <div className="svc-ghost">WHAT WE DO</div>
-          <p className="svc-e">What we do</p>
-          <h2 className="svc-h2">
-            Everything you need,
-            <br />
-            built in-house
-          </h2>
-          <p className="svc-p">
-            From custom websites to mobile apps and automation — one team, full ownership, and support that stays after launch.
-          </p>
-          <a className="svc-btn">Start a Project</a>
+          <Reveal delay={REVEAL_DELAY.eyebrow}>
+            <p className="svc-e">What we do</p>
+          </Reveal>
+          <Reveal delay={REVEAL_DELAY.heading}>
+            <h2 className="svc-h2">
+              Everything you need,
+              <br />
+              built in-house
+            </h2>
+          </Reveal>
+          <Reveal delay={REVEAL_DELAY.paragraph}>
+            <p className="svc-p">
+              From custom websites to mobile apps and automation — one team, full ownership, and support that stays after launch.
+            </p>
+          </Reveal>
+          <ButtonPrimary className="mt-6 font-[family-name:var(--font-display)]">Start a Project</ButtonPrimary>
           <div className="svc-prog">
             {CARDS.map((_, i) => (
               <i key={i} className={i <= active ? "on" : ""} />

@@ -7,10 +7,10 @@ import { Services } from "@/components/sections/Services";
 import { Cases } from "@/components/sections/Cases";
 import { WhoWeBuildFor } from "@/components/sections/WhoWeBuildFor";
 import { Testimonials } from "@/components/sections/Testimonials";
-import { Discovery } from "@/components/sections/Discovery";
+import { DiscoveryCallCTA } from "@/components/sections/DiscoveryCallCTA";
 import { TechStack } from "@/components/sections/TechStack";
-import { FAQ } from "@/components/sections/FAQ";
-import { Contact } from "@/components/sections/Contact";
+import { FAQSection } from "@/components/sections/FAQSection";
+import { ContactSection } from "@/components/sections/ContactSection";
 
 export default function Home() {
   return (
@@ -24,10 +24,10 @@ export default function Home() {
       <Cases />
       <WhoWeBuildFor />
       <Testimonials />
-      <Discovery />
+      <DiscoveryCallCTA />
       <TechStack />
-      <FAQ />
-      <Contact />
+      <FAQSection />
+      <ContactSection />
     </main>
   );
 }

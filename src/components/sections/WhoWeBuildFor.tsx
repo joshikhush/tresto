@@ -1,10 +1,13 @@
 "use client";
 
 import { useEffect, useState, type KeyboardEvent } from "react";
-import { ChevronLeft, ChevronRight, Play } from "lucide-react";
-import { Section, SectionLabel, GhostWord } from "@/components/ui";
+import Image from "next/image";
+import { ChevronLeft, ChevronRight } from "lucide-react";
+import { Section, SectionLabel, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+
+const UNSPLASH_PARAMS = "?auto=format&fit=crop&w=800&q=70";
 
 interface Industry {
   id: string;
@@ -12,10 +15,12 @@ interface Industry {
   lead: string;
   /** Regular-weight remainder of the caption (leading space intentional). */
   text: string;
-  /** Short lowercase tag shown on the screenshot placeholder. */
-  category: string;
-  /** Real screenshot path once assets exist — falls back to a gradient placeholder. */
+  /** Proper display name — shown as the white heading over the photo. */
+  name: string;
+  /** Real photo — falls back to a gradient placeholder if omitted. */
   image?: string;
+  /** Descriptive alt text for the photo. */
+  imageAlt?: string;
   /** Case-study link for the center card — omitted where none exists yet. */
   href?: string;
 }
@@ -27,35 +32,45 @@ const industries: Industry[] = [
     id: "manufacturing",
     lead: "Manufacturing:",
     text: " catalogs, enquiry pipelines & internal tools",
-    category: "manufacturing",
+    name: "Manufacturing",
+    image: `https://images.unsplash.com/photo-1565043666747-69f6646db940${UNSPLASH_PARAMS}`,
+    imageAlt: "Industrial machinery on a factory production line",
     href: "#", // -> Triveni Radiators case study
   },
   {
     id: "real-estate",
     lead: "Real Estate:",
     text: " property sites with WhatsApp-first leads",
-    category: "real estate",
+    name: "Real Estate",
+    image: `https://images.unsplash.com/photo-1560518883-ce09059eeffa${UNSPLASH_PARAMS}`,
+    imageAlt: "Modern residential building exterior against a blue sky",
     href: "#", // -> Manglam Homes case study
   },
   {
     id: "ngo",
     lead: "NGOs & Local:",
     text: " profiles & CSR decks that build credibility",
-    category: "ngo",
+    name: "NGOs & Local Business",
+    image: `https://images.unsplash.com/photo-1556761175-5973dc0f32e7${UNSPLASH_PARAMS}`,
+    imageAlt: "Community volunteers working together on a local project",
     href: "#", // -> Virtuous Club India case study
   },
   {
     id: "field-services",
     lead: "Field Services:",
     text: " offline-first apps for crews in the field",
-    category: "field services",
+    name: "Field Services",
+    image: `https://images.unsplash.com/photo-1581578731548-c64695cc6952${UNSPLASH_PARAMS}`,
+    imageAlt: "A field technician working on equipment outdoors",
     href: "#", // -> HiveGuard case study
   },
   {
     id: "startups",
     lead: "Startups:",
     text: " MVPs in weeks — web, mobile & AI in one place",
-    category: "startups",
+    name: "Startups",
+    image: `https://images.unsplash.com/photo-1559136555-9303baea8ebd${UNSPLASH_PARAMS}`,
+    imageAlt: "Founders collaborating around a laptop in a startup workspace",
   },
 ];
 
@@ -105,12 +120,22 @@ export function WhoWeBuildFor() {
   return (
     <Section bg="white" className="relative overflow-hidden">
       <GhostWord>WHO WE BUILD FOR</GhostWord>
-      <SectionLabel>Who we build for</SectionLabel>
-      <h2 className="mt-2 text-section-title text-ink">Built for teams who need to move fast</h2>
-      <p className="mt-2 max-w-xl text-sm text-text-muted">
-        Pick your industry — see what we ship for teams like yours.
-      </p>
+      <Reveal delay={REVEAL_DELAY.eyebrow}>
+        <SectionLabel>Who we build for</SectionLabel>
+      </Reveal>
+      <Reveal delay={REVEAL_DELAY.heading}>
+        <h2 className="mt-2 text-section-title text-ink">Built for teams who need to move fast</h2>
+      </Reveal>
+      <Reveal delay={REVEAL_DELAY.paragraph}>
+        <p className="mt-2 max-w-xl text-sm text-text-muted">
+          Pick your industry — see what we ship for teams like yours.
+        </p>
+      </Reveal>
 
+      {/* Prev/next arrows + the dot indicators below are carousel navigation
+          controls, not CTA-style buttons — out of scope for the site-wide
+          ButtonPrimary/ButtonSecondary pass (same category as the FAQ
+          accordion toggles and Footer social icons). */}
       <div className="relative mx-auto mt-11 max-w-[1180px] px-[50px] min-[760px]:px-16">
         <button
           type="button"
@@ -147,11 +172,29 @@ export function WhoWeBuildFor() {
                   <span className="h-[7px] w-[7px] rounded-full bg-amber/70" />
                   <span className="h-[7px] w-[7px] rounded-full bg-emerald/70" />
                 </div>
-                <div className="relative flex h-[95px] items-center justify-center bg-gradient-to-br from-lilac-100 to-pink-tint min-[760px]:h-[120px]">
-                  <span className="font-body text-[10px] text-violet-soft">{industry.category}</span>
-                  <span className="absolute flex h-10 w-10 items-center justify-center rounded-full bg-violet text-white shadow-[0_8px_20px_rgba(91,33,182,0.4)] transition-transform duration-200 group-hover:scale-110">
-                    <Play className="h-3.5 w-3.5 fill-current" />
-                  </span>
+                <div className="relative h-[95px] min-[760px]:h-[120px]">
+                  {industry.image ? (
+                    <>
+                      <Image
+                        src={industry.image}
+                        alt={industry.imageAlt ?? industry.name}
+                        fill
+                        sizes="270px"
+                        className="object-cover"
+                      />
+                      <div
+                        aria-hidden
+                        className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/10 to-transparent"
+                      />
+                      <span className="absolute bottom-1.5 left-2.5 font-display text-xs font-bold text-white min-[760px]:text-sm">
+                        {industry.name}
+                      </span>
+                    </>
+                  ) : (
+                    <div className="flex h-full items-center justify-center bg-gradient-to-br from-lilac-100 to-pink-tint">
+                      <span className="font-body text-[10px] text-violet-soft">{industry.name}</span>
+                    </div>
+                  )}
                 </div>
               </div>
             );
@@ -166,7 +209,7 @@ export function WhoWeBuildFor() {
                 onClick={() => !isCenter && jump(index)}
                 onKeyDown={(event) => handleCardKeyDown(event, index, isCenter)}
                 className={cn(
-                  "group absolute left-1/2 top-[26px] w-[210px] transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none min-[760px]:w-[270px]",
+                  "absolute left-1/2 top-[26px] w-[210px] transition-[transform,opacity] duration-[600ms] ease-[cubic-bezier(0.33,1,0.68,1)] motion-reduce:transition-none min-[760px]:w-[270px]",
                   isCenter && industry.href ? "cursor-default" : "cursor-pointer"
                 )}
                 style={{
@@ -184,7 +227,7 @@ export function WhoWeBuildFor() {
                     )}
                   >
                     {isCenter && industry.href ? (
-                      <a href={industry.href} aria-label={`See the ${industry.category} case study`}>
+                      <a href={industry.href} aria-label={`See the ${industry.name} case study`}>
                         {shot}
                       </a>
                     ) : (
