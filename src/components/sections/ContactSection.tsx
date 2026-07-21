@@ -224,7 +224,7 @@ export function ContactSection({
   };
 
   return (
-    <section className="relative overflow-hidden py-24">
+    <section id="contact" className="relative overflow-hidden py-24">
       <div aria-hidden className="contact-mesh absolute inset-0" />
 
       <div className="relative z-10 mx-auto flex max-w-[1200px] justify-center px-6">

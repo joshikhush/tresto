@@ -110,7 +110,7 @@ function ToolCard({ tool }: { tool: Tool }) {
  */
 export function TechStack() {
   return (
-    <Section bg="white" className="relative overflow-hidden">
+    <Section id="tech" bg="white" className="relative overflow-hidden">
       <GhostWord>OUR TECH STACK</GhostWord>
 
       <div className="grid grid-cols-1 items-center gap-10 min-[860px]:grid-cols-[1fr_1.2fr] min-[860px]:gap-[60px]">

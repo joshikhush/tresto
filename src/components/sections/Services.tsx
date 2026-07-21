@@ -75,7 +75,7 @@ export function Services() {
   }, []);
 
   return (
-    <section className="svc-sec" ref={secRef}>
+    <section id="services" className="svc-sec" ref={secRef}>
       <div className="svc-pin">
         <div className="svc-left">
           <div className="svc-ghost">WHAT WE DO</div>

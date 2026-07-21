@@ -87,7 +87,7 @@ export function Cases() {
   }, [prefersReducedMotion]);
 
   return (
-    <section className="cs-section">
+    <section id="work" className="cs-section">
       <div className="cs-container">
         <Reveal delay={REVEAL_DELAY.eyebrow}>
           <p className="cs-eyebrow">Our Work</p>

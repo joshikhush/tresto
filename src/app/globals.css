@@ -54,6 +54,21 @@
   --shadow-card-hover: 0 16px 40px rgba(91, 33, 182, 0.12);
 }
 
+/* Single-page nav: smooth in-page scrolling, offset so the sticky navbar
+   doesn't cover the section heading it jumps to. */
+html {
+  scroll-behavior: smooth;
+}
+
+#services,
+#work,
+#about,
+#tech,
+#faq,
+#contact {
+  scroll-margin-top: 90px;
+}
+
 /* Composite tokens that Tailwind's @theme namespaces don't cover 1:1
    (multi-property type scale, letter-spacing, gradient backgrounds). */
 @layer components {

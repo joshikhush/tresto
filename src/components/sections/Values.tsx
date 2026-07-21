@@ -40,7 +40,7 @@ export function Values() {
       <div className="mt-10 grid grid-cols-2 gap-6 lg:grid-cols-5">
         {values.map(({ title, description, icon: Icon }, index) => (
           <Reveal key={title} delay={REVEAL_DELAY.gridBase + index * REVEAL_DELAY.gridStep}>
-            <div className="gradient-border-card group rounded-card border-[0.5px] border-border bg-white p-5 text-center transition-transform duration-300 hover:-translate-y-1 motion-reduce:transition-none motion-reduce:hover:translate-y-0">
+            <div className="gradient-border-card group rounded-card border-[0.5px] border-border bg-[linear-gradient(150deg,#fff,#fff)] p-5 text-center transition-[background,box-shadow,transform] duration-300 hover:-translate-y-1 hover:bg-[linear-gradient(150deg,#EDE9FE,#FCE7F3)] hover:shadow-[0_18px_42px_rgba(91,33,182,0.18)] motion-reduce:transition-none motion-reduce:hover:translate-y-0">
               <span className="mx-auto flex h-[46px] w-[46px] items-center justify-center rounded-chip bg-lilac-card text-violet transition-all duration-300 group-hover:scale-105 group-hover:bg-violet group-hover:text-white motion-reduce:transition-none motion-reduce:group-hover:scale-100">
                 <Icon className="h-5 w-5" strokeWidth={1.75} />
               </span>

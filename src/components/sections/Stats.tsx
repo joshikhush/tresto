@@ -94,7 +94,7 @@ function StatColumn({ icon: Icon, value, suffix, staticText, label, todo, index 
  */
 export function Stats() {
   return (
-    <Section bg="lilac-50" className="relative overflow-hidden">
+    <Section id="about" bg="lilac-50" className="relative overflow-hidden">
       <GhostWord>WHO WE ARE</GhostWord>
       <div className="mx-auto max-w-2xl text-center">
         <Reveal delay={REVEAL_DELAY.eyebrow}>

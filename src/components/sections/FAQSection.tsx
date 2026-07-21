@@ -193,7 +193,7 @@ export function FAQSection({
   const columns = [items.slice(0, half), items.slice(half)];
 
   return (
-    <section className={`${spaceGrotesk.variable} relative overflow-hidden bg-[var(--faq-bg-page)] py-16 md:py-[90px]`}>
+    <section id="faq" className={`${spaceGrotesk.variable} relative overflow-hidden bg-[var(--faq-bg-page)] py-16 md:py-[90px]`}>
       <div className="relative mx-auto max-w-[1200px] px-8">
         <GhostWord>FAQ</GhostWord>
         <Reveal delay={REVEAL_DELAY.eyebrow}>

@@ -5,22 +5,22 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { AnimatePresence, motion, type Variants } from "framer-motion";
 import { Logo } from "@/components/Logo";
+import { HoverSweepFill, SWEEP_LIFT_CLASSES } from "@/components/ui/ButtonSecondary";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 import type { NavLink } from "@/types";
 
 const navLinks: NavLink[] = [
   { label: "Home", href: "/" },
-  { label: "Services", href: "/services" },
-  { label: "Work", href: "/work" },
-  { label: "About", href: "/about" },
-  { label: "Blog", href: "/blog" },
-  { label: "Contact", href: "/contact" },
+  { label: "Services", href: "#services" },
+  { label: "Work", href: "#work" },
+  { label: "About", href: "#about" },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];
 
 const SCROLL_THRESHOLD = 40;
 const REVEAL_EASE: [number, number, number, number] = [0.22, 1, 0.36, 1];
-const SWEEP_EASE = "cubic-bezier(0.4,0,0.2,1)";
 const BURGER_EASE = "cubic-bezier(0.4,0,0.2,1)";
 /** Matches the reference's cubic-bezier(.34,1.4,.44,1) overshoot by feel, not by porting the curve directly. */
 const BLOB_SPRING = { type: "spring" as const, stiffness: 350, damping: 28 };
@@ -196,16 +196,13 @@ export function Navbar() {
 
           <div className="flex items-center gap-3">
             <Link
-              href="/contact"
-              className="group relative hidden overflow-hidden rounded-pill bg-ink px-5 py-2.5 text-sm font-semibold text-white transition-transform duration-200 hover:-translate-y-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold md:inline-flex md:items-center"
+              href="#contact"
+              className={cn(
+                SWEEP_LIFT_CLASSES,
+                "hidden rounded-pill bg-ink px-5 py-2.5 text-sm font-semibold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold md:inline-flex md:items-center"
+              )}
             >
-              <span
-                aria-hidden
-                className={cn(
-                  "absolute inset-0 -translate-x-[101%] bg-[linear-gradient(120deg,var(--color-violet),var(--color-gold))] transition-transform duration-[350ms] group-hover:translate-x-0 group-focus-visible:translate-x-0"
-                )}
-                style={{ transitionTimingFunction: SWEEP_EASE }}
-              />
+              <HoverSweepFill />
               <span className="relative z-10">Get in Touch</span>
             </Link>
 
@@ -287,7 +284,7 @@ export function Navbar() {
               className="mt-auto"
             >
               <Link
-                href="/contact"
+                href="#contact"
                 className="block rounded-pill bg-[linear-gradient(120deg,var(--color-violet),var(--color-gold))] py-3.5 text-center text-base font-bold text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold"
               >
                 Get in Touch
