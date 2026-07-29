@@ -1,59 +1,95 @@
 "use client";
 
+import { useEffect, useRef, useState, type CSSProperties } from "react";
 import { Section, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
-// Real project/client names — §3 honesty guardrails forbid invented
-// client logos, so this stays plain text until logo assets exist.
-// TODO(polish): swap for real client logo marks.
+// Real project/client names — §3 honesty guardrails forbid invented client
+// logos, and no logo image assets exist yet, so each renders as a clean
+// typographic wordmark instead of an image mark.
+// TODO(polish): swap for real logo marks if/when assets exist.
 const clients = ["Triveni Radiators", "Manglam Homes", "Rotary Nagar", "ReshapeNation", "HiveGuard"];
 
-const maskImage =
-  "linear-gradient(to right, transparent, black 12%, black 88%, transparent)";
+const STAGGER_MS = 90;
 
 /**
- * S5 — Trusted by. Single auto-scrolling marquee row (list duplicated for
- * a seamless loop, `animate-marquee` CSS keyframe in globals.css —
- * translateX(-50%) over 20s linear), edges faded with a mask-image
- * gradient, paused on hover. When prefers-reduced-motion is set the list
- * isn't duplicated and the animation class is dropped, so it renders as
- * one static centered row instead.
+ * S5 — Trusted by, restyled as a single curated row of client wordmarks
+ * (see `.logo-mark` / `.logo-row` in globals.css for the blur-to-sharp
+ * entrance). One IntersectionObserver on the row adds `.logo-in` once,
+ * which cascades the staggered reveal to every mark via its own
+ * `--logo-delay` custom property — cheaper than one observer per mark, and
+ * keeps the whole row arriving as a single sequence rather than each mark
+ * re-triggering independently. Vertical 1px dividers only render at `md+`,
+ * where the row is guaranteed to stay single-line (flex-nowrap); below
+ * that it wraps with plain gaps instead of a stray leading divider on the
+ * wrapped line. Skipped entirely under prefers-reduced-motion — the CSS
+ * media query in globals.css renders every mark at its resting opacity
+ * immediately, independent of whether `.logo-in` ever gets added.
  */
 export function Trusted() {
   const prefersReducedMotion = usePrefersReducedMotion();
-  const items = prefersReducedMotion ? clients : [...clients, ...clients];
+  const rowRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+    const node = rowRef.current;
+    if (!node) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setInView(true);
+          observer.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [prefersReducedMotion]);
 
   return (
     <Section bg="white" className="relative overflow-hidden">
       <GhostWord>TRUSTED</GhostWord>
+
       <Reveal delay={REVEAL_DELAY.eyebrow}>
         <p className="tracking-label text-center text-xs font-semibold uppercase text-text-muted">
-          Teams we&apos;ve shipped for
+          Selected collaborations
         </p>
       </Reveal>
 
       <Reveal delay={REVEAL_DELAY.heading}>
-        <div
-          className="group mt-8 overflow-hidden"
-          style={{ maskImage, WebkitMaskImage: maskImage }}
-        >
-          <div
-            className={cn(
-              "flex w-max items-center gap-16 whitespace-nowrap",
-              prefersReducedMotion
-                ? "mx-auto justify-center"
-                : "animate-marquee group-hover:[animation-play-state:paused]"
-            )}
-          >
-            {items.map((name, index) => (
-              <span key={`${name}-${index}`} className="font-display text-lg text-text-faint">
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
+        <h2 className="mx-auto mt-4 max-w-xl text-center font-display text-3xl font-extrabold leading-[1.3] tracking-tight text-ink sm:text-4xl">
+          Teams we&apos;ve{" "}
+          <span className="font-accent-serif text-[1.15em] font-normal italic">shipped</span> for
+        </h2>
       </Reveal>
+
+      <div
+        ref={rowRef}
+        role="list"
+        aria-label="Companies Tresto has shipped products for"
+        className={cn(
+          "logo-row mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:mt-16 md:flex-nowrap md:justify-center md:gap-x-0",
+          inView && "logo-in"
+        )}
+      >
+        {clients.map((name, index) => (
+          <div key={name} role="listitem" className="flex items-center">
+            {index > 0 && (
+              <span aria-hidden className="mx-8 hidden h-6 w-px shrink-0 bg-border md:block lg:mx-12" />
+            )}
+            <span
+              className="logo-mark whitespace-nowrap font-display text-lg font-semibold tracking-tight text-text-strong"
+              style={{ "--logo-delay": `${index * STAGGER_MS}ms` } as CSSProperties}
+            >
+              {name}
+            </span>
+          </div>
+        ))}
+      </div>
     </Section>
   );
 }

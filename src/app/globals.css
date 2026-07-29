@@ -43,6 +43,8 @@
   /* Fonts (variables come from next/font in layout.tsx) */
   --font-display: var(--font-plus-jakarta-sans), ui-sans-serif, system-ui, sans-serif;
   --font-body: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Editorial italic accent — Trusted-by heading only (Trusted.tsx). */
+  --font-accent-serif: var(--font-instrument-serif), Georgia, serif;
 
   /* Radius */
   --radius-pill: 999px;
@@ -122,21 +124,6 @@ html {
      than the order they're written in a className string. */
   .hero-offset-top {
     padding-top: 150px !important;
-  }
-
-  /* Trusted-by marquee (S5) — list is rendered twice so -50% is exactly
-     one full loop. Skipped entirely when prefers-reduced-motion is set. */
-  @keyframes marquee {
-    from {
-      transform: translateX(0);
-    }
-    to {
-      transform: translateX(-50%);
-    }
-  }
-
-  .animate-marquee {
-    animation: marquee 20s linear infinite;
   }
 
   /* Tech Stack vertical marquee (S14) — each column's tool list is
@@ -288,6 +275,50 @@ html {
     }
   }
 }
+
+/* ===== Teams we've shipped for (S5) — wordmark row =====
+   Real client names only, rendered as plain typographic wordmarks (no logo
+   image assets exist, and §3 honesty guardrails forbid fabricated big-brand
+   logos) — see Trusted.tsx. Entrance is a blur-to-sharp reveal staggered via
+   --logo-delay (index * 90ms, set inline per mark), triggered once by adding
+   .logo-in to the row's ancestor (single IntersectionObserver on the row,
+   Trusted.tsx) rather than one observer per mark. Resting opacity is a
+   deliberately dimmed .85, not 1 — hover lifts to full 1 so the row reads as
+   quiet/restrained until you engage with it. The hover rule's selector is
+   prefixed with the full `.logo-row.logo-in` chain purely so its specificity
+   (0,4,0) beats the entrance end-state rule below (0,3,0); a bare
+   `.logo-mark:hover` would otherwise lose to it once revealed. */
+.logo-mark {
+  display: inline-block;
+  opacity: 0;
+  filter: blur(8px);
+  transform: translateY(14px);
+  transition:
+    opacity 750ms cubic-bezier(.22, 1, .36, 1) var(--logo-delay, 0ms),
+    filter 750ms cubic-bezier(.22, 1, .36, 1) var(--logo-delay, 0ms),
+    transform 750ms cubic-bezier(.22, 1, .36, 1) var(--logo-delay, 0ms);
+}
+
+.logo-row.logo-in .logo-mark {
+  opacity: .85;
+  filter: blur(0);
+  transform: translateY(0);
+}
+
+.logo-row.logo-in .logo-mark:hover {
+  opacity: 1;
+  transition: opacity 200ms ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .logo-mark {
+    opacity: .85;
+    filter: none;
+    transform: none;
+    transition: opacity 200ms ease;
+  }
+}
+
 /* ===== What we do — pinned stacking cards. Append to globals.css ===== */
 .svc-sec { position: relative; height: 640vh; background: #F0EEFF; }
 .svc-pin {

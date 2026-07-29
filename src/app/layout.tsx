@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, Instrument_Serif } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
@@ -14,6 +14,15 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
+// Single italic cut, used only as a small editorial accent word inside the
+// Trusted-by heading (Trusted.tsx) — not a general body/heading typeface.
+const instrumentSerif = Instrument_Serif({
+  variable: "--font-instrument-serif",
+  subsets: ["latin"],
+  weight: "400",
+  style: ["italic"],
+});
+
 export const metadata: Metadata = {
   title: "Tresto — Software & AI Studio",
   description:
@@ -26,7 +35,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${plusJakartaSans.variable} ${inter.variable}`}>
+    <html
+      lang="en"
+      className={`${plusJakartaSans.variable} ${inter.variable} ${instrumentSerif.variable}`}
+    >
       <body className="min-h-screen bg-white font-body text-ink antialiased">
         <Navbar />
         {children}
