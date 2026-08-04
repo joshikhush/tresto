@@ -197,6 +197,14 @@ export const CaseStudies: CollectionConfig = {
                   admin: { description: 'What we built and how we approached it.' },
                 },
                 {
+                  name: 'pullQuote',
+                  type: 'textarea',
+                  admin: {
+                    description:
+                      'One striking line that breaks up the middle of the article. Optional — the section disappears if empty.',
+                  },
+                },
+                {
                   name: 'keyFeatures',
                   type: 'array',
                   labels: { singular: 'Feature', plural: 'Features' },

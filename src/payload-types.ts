@@ -222,6 +222,10 @@ export interface CaseStudy {
     };
     [k: string]: unknown;
   } | null;
+  /**
+   * One striking line that breaks up the middle of the article. Optional — the section disappears if empty.
+   */
+  pullQuote?: string | null;
   keyFeatures?:
     | {
         heading: string;
@@ -455,6 +459,7 @@ export interface CaseStudiesSelect<T extends boolean = true> {
   coverImage?: T;
   problem?: T;
   solution?: T;
+  pullQuote?: T;
   keyFeatures?:
     | T
     | {

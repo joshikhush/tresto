@@ -1,0 +1,182 @@
+// Tresto brand theme for the Payload admin panel (light mode only).
+//
+// Most of this file overrides the CSS custom properties that @payloadcms/ui
+// defines (see node_modules/@payloadcms/ui/dist/scss/colors.scss and
+// app.scss). A few component selectors are targeted directly below the
+// :root block, where a variable override isn't expressive enough (gradient
+// backgrounds, a second font family scoped to headings only). Declarations
+// here are unlayered, so per the CSS cascade-layers spec they win over
+// Payload's `@layer payload-default` rules regardless of source order or
+// selector specificity — that's also why targeting `.btn--style-primary`
+// with the `background` shorthand beats Payload's own `background-color`
+// declaration.
+//
+// Known gap: active-nav/tab-underline widths stay at Payload's hardcoded 2px
+// (not expressible as a variable override in this Payload version).
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Plus+Jakarta+Sans:wght@700;800&display=swap');
+
+:root {
+  // Neutral / elevation ramp — drives borders, body emphasis, primary button
+  // bg + hover, tab underline, nav hover states, tooltips, pills, etc.
+  --color-base-0: #ffffff;
+  --color-base-50: #fbfafe;
+  --color-base-100: #f3effc; // violet soft
+  --color-base-150: #e9e7f2; // line
+  --color-base-200: #d8d5e8; // line strong
+  --color-base-250: #c7c2da;
+  --color-base-300: #b3adc9;
+  --color-base-350: #a099bc;
+  --color-base-400: #8e8da3; // ink 3 (muted text)
+  --color-base-450: #817d99;
+  --color-base-500: #726d8c;
+  --color-base-550: #675f82;
+  --color-base-600: #7c3aed; // violet mid (hover accent)
+  --color-base-650: #6d2fcb;
+  --color-base-700: #64289e;
+  --color-base-750: #5a2aa0;
+  --color-base-800: #5b21b6; // violet (primary actions, active states)
+  --color-base-850: #3d2470;
+  --color-base-900: #1a1a2e; // navy
+  --color-base-950: #14141f;
+  --color-base-1000: #0d0d14;
+
+  // Semantic surfaces, decoupled from the ramp above so body copy/backgrounds
+  // stay navy/near-white rather than inheriting the violet accent tone.
+  --theme-bg: #f7f6fb; // page bg
+  --theme-input-bg: #ffffff; // card bg
+  --theme-text: #1a1a2e; // navy
+
+  // Success ramp
+  --color-success-50: #e4f6ee;
+  --color-success-100: #cff0e0;
+  --color-success-150: #b8e8d0;
+  --color-success-200: #9edfc0;
+  --color-success-250: #83d5ae;
+  --color-success-300: #66ca9c;
+  --color-success-350: #4bbf8b;
+  --color-success-400: #33b47b;
+  --color-success-450: #229d6c;
+  --color-success-500: #0e7c55;
+  --color-success-550: #0c6e4c;
+  --color-success-600: #0a5f42;
+  --color-success-650: #095238;
+  --color-success-700: #08452f;
+  --color-success-750: #073827;
+  --color-success-800: #052c1f;
+  --color-success-850: #042117;
+  --color-success-900: #03170f;
+  --color-success-950: #020d08;
+
+  // Warning ramp (brand gold — brief specifies gold-text-on-gold-soft for warnings)
+  --color-warning-50: #fef7e0;
+  --color-warning-100: #fcefc4;
+  --color-warning-150: #fae6a3;
+  --color-warning-200: #f7dc82;
+  --color-warning-250: #f5d25f;
+  --color-warning-300: #f5c518; // gold
+  --color-warning-350: #d9ae12;
+  --color-warning-400: #be990e;
+  --color-warning-450: #a4840a;
+  --color-warning-500: #8a6a00; // gold text
+  --color-warning-550: #7a5d00;
+  --color-warning-600: #6b5100;
+  --color-warning-650: #5c4500;
+  --color-warning-700: #4d3a00;
+  --color-warning-750: #3f2f00;
+  --color-warning-800: #312500;
+  --color-warning-850: #241a00;
+  --color-warning-900: #181100;
+  --color-warning-950: #0c0900;
+
+  // Typography
+  --font-body:
+    'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+    sans-serif;
+  --font-heading: 'Plus Jakarta Sans', var(--font-body);
+}
+
+// Headings only — body copy stays on --font-body (Inter). Covers every real
+// heading tag Payload renders (h1-h4), plus the two cases that are headings
+// visually but worth naming explicitly: the dashboard's collection-group
+// labels (`.collections__label`, an <h2>) and the document title on edit
+// views (`.render-title`, an <h1>).
+h1,
+h2,
+h3,
+h4,
+.collections__label,
+.render-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+// Step-nav home link — Payload sizes this for its square SVG fallback
+// (18x18px, see StepNav/index.scss). Our Icon is the wordmark, not a glyph,
+// so let the link size to its content instead of clipping/wrapping it.
+.step-nav__home {
+  width: auto;
+  height: auto;
+  display: inline-flex;
+  align-items: center;
+}
+
+// Primary buttons — brand gradient. Payload consumes --bg-color through
+// `background-color`, which can't render a gradient at all, so the fix has
+// to target the component class directly rather than the CSS var.
+.btn--style-primary {
+  background: linear-gradient(90deg, #5b21b6 0%, #7c3aed 45%, #f5c518 100%);
+  border: none;
+  transition:
+    filter 100ms cubic-bezier(0, 0.2, 0.2, 1),
+    box-shadow 100ms cubic-bezier(0, 0.2, 0.2, 1);
+
+  &:hover,
+  &:focus-visible,
+  &:focus,
+  &:active {
+    filter: brightness(1.08);
+  }
+
+  // Disabled must read as inactive, not just a dimmer gradient — drop back
+  // to a flat elevation color so it doesn't compete with enabled buttons.
+  &.btn--disabled {
+    background: var(--theme-elevation-200);
+    filter: none;
+  }
+}
+
+// Dashboard collection cards — tiles rendered by CollectionCards. Scoped to
+// `.collections__card-list` so it doesn't touch Card usage elsewhere in the
+// admin (relationship tables, list drawers, etc).
+.collections__card-list {
+  .card {
+    background: var(--color-base-0);
+    border: 1px solid var(--color-base-150);
+    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(26, 26, 46, 0.04);
+
+    &:hover {
+      border-color: #ddd2f5;
+      box-shadow: 0 4px 14px rgba(91, 33, 182, 0.08);
+    }
+  }
+
+  // The "+" create-new button in the card's corner.
+  .card__actions .btn {
+    --color: var(--color-base-800);
+  }
+
+  .card__actions .btn__icon {
+    background-color: var(--color-base-100);
+    border-color: var(--color-base-100);
+  }
+
+  // Card titles read at a lighter weight than page headings (h1-h4 are 700).
+  .card__title {
+    font-family: var(--font-heading);
+    font-weight: 600;
+    color: var(--color-base-900);
+  }
+}

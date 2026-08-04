@@ -1,5 +1,6 @@
 import { postgresAdapter } from '@payloadcms/db-postgres'
 import { lexicalEditor } from '@payloadcms/richtext-lexical'
+import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import path from 'path'
 import { buildConfig } from 'payload'
 import sharp from 'sharp'
@@ -15,8 +16,15 @@ const dirname = path.dirname(filename)
 export default buildConfig({
   admin: {
     user: Users.slug,
+    theme: 'light',
     importMap: {
       baseDir: path.resolve(dirname),
+    },
+    components: {
+      graphics: {
+        Logo: '/components/admin/graphics/Brand#Logo',
+        Icon: '/components/admin/graphics/Brand#Icon',
+      },
     },
   },
   collections: [CaseStudies, Media, Users],
@@ -32,4 +40,12 @@ export default buildConfig({
     },
   }),
   sharp,
+  plugins: [
+    vercelBlobStorage({
+      collections: {
+        media: true,
+      },
+      token: process.env.BLOB_READ_WRITE_TOKEN,
+    }),
+  ],
 })
