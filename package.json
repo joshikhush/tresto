@@ -10,18 +10,11 @@
     "lint": "eslint"
   },
   "dependencies": {
-    "@payloadcms/db-postgres": "^3.86.0",
-    "@payloadcms/next": "^3.86.0",
-    "@payloadcms/richtext-lexical": "^3.86.0",
-    "@payloadcms/storage-vercel-blob": "^3.86.0",
     "framer-motion": "^12.42.0",
-    "graphql": "^16.14.2",
     "lucide-react": "^1.21.0",
     "next": "16.2.9",
-    "payload": "^3.86.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4",
-    "sharp": "^0.35.3"
+    "react-dom": "19.2.4"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
