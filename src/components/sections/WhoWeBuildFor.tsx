@@ -67,7 +67,7 @@ const industries: Industry[] = [
   {
     id: "startups",
     lead: "Startups:",
-    text: " MVPs in weeks — web, mobile & AI in one place",
+    text: " MVPs in weeks - web, mobile & AI in one place",
     name: "Startups",
     image: `https://images.unsplash.com/photo-1559136555-9303baea8ebd${UNSPLASH_PARAMS}`,
     imageAlt: "Founders collaborating around a laptop in a startup workspace",
@@ -128,7 +128,7 @@ export function WhoWeBuildFor() {
       </Reveal>
       <Reveal delay={REVEAL_DELAY.paragraph}>
         <p className="mt-2 max-w-xl text-sm text-text-muted">
-          Pick your industry — see what we ship for teams like yours.
+          Pick your industry, see what we ship for teams like yours.
         </p>
       </Reveal>
 

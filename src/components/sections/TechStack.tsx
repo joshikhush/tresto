@@ -123,7 +123,7 @@ export function TechStack() {
           </Reveal>
           <Reveal delay={REVEAL_DELAY.paragraph}>
             <p className="mt-3 max-w-md text-sm text-text-muted">
-              The languages, frameworks and platforms we reach for on almost every engagement — hover the columns
+              The languages, frameworks and platforms we reach for on almost every engagement, hover the columns
               to pause and take a closer look.
             </p>
           </Reveal>

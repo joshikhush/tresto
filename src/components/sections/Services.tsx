@@ -8,10 +8,10 @@ const PEEK = CARD_H + GAP;
 const easeInOut = (t: number) => (t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2);
 
 const CARDS = [
-  { no: "01", icon: "◆", title: "Custom Website Development", desc: "Fast, SEO-ready websites built around your brand and business goals — designed to convert." },
+  { no: "01", icon: "◆", title: "Custom Software Development", desc: "Fast, SEO-ready websites built around your brand and business goals, designed to convert." },
   { no: "02", icon: "▲", title: "Mobile App Development", desc: "iOS & Android apps from one clean Flutter codebase, on a solid backend." },
   { no: "03", icon: "✦", title: "AI & Automation Pipelines", desc: "Custom automations and AI workflows that quietly remove repetitive manual work." },
-  { no: "04", icon: "◈", title: "Integration & Support", desc: "We connect your tools into one system — and stay on after launch." },
+  { no: "04", icon: "◈", title: "Integration & Support", desc: "We connect your tools into one system, and stay on after launch." },
 ];
 
 export function Services() {
@@ -91,10 +91,12 @@ export function Services() {
           </Reveal>
           <Reveal delay={REVEAL_DELAY.paragraph}>
             <p className="svc-p">
-              From custom websites to mobile apps and automation — one team, full ownership, and support that stays after launch.
+              From custom websites to mobile apps and automation: one team, full ownership, and support that stays after launch.
             </p>
           </Reveal>
-          <ButtonPrimary className="mt-6 font-[family-name:var(--font-display)]">Start a Project</ButtonPrimary>
+          <ButtonPrimary href="#contact" className="mt-6 font-[family-name:var(--font-display)]">
+            Start a Project
+          </ButtonPrimary>
           <div className="svc-prog">
             {CARDS.map((_, i) => (
               <i key={i} className={i <= active ? "on" : ""} />

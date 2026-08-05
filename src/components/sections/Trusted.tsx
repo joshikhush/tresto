@@ -5,11 +5,12 @@ import { Section, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
-// Real project/client names — §3 honesty guardrails forbid invented client
-// logos, and no logo image assets exist yet, so each renders as a clean
-// typographic wordmark instead of an image mark.
-// TODO(polish): swap for real logo marks if/when assets exist.
-const clients = ["Triveni Radiators", "Manglam Homes", "Rotary Nagar", "ReshapeNation", "HiveGuard"];
+// Industries of real clients, not names — §3 honesty guardrails forbid
+// invented client logos, and no logo image assets exist yet, so each renders
+// as a clean typographic wordmark instead of an image mark. Matches the
+// industry labels used in the "Who we build for" section (see
+// WhoWeBuildFor.tsx `industries`).
+const industries = ["Manufacturing", "Real Estate", "Real Estate", "Startups", "Field Services"];
 
 const STAGGER_MS = 90;
 
@@ -70,14 +71,14 @@ export function Trusted() {
       <div
         ref={rowRef}
         role="list"
-        aria-label="Companies Tresto has shipped products for"
+        aria-label="Industries Tresto has shipped products for"
         className={cn(
           "logo-row mt-14 flex flex-wrap items-center justify-center gap-x-10 gap-y-8 md:mt-16 md:flex-nowrap md:justify-center md:gap-x-0",
           inView && "logo-in"
         )}
       >
-        {clients.map((name, index) => (
-          <div key={name} role="listitem" className="flex items-center">
+        {industries.map((name, index) => (
+          <div key={`${name}-${index}`} role="listitem" className="flex items-center">
             {index > 0 && (
               <span aria-hidden className="mx-8 hidden h-6 w-px shrink-0 bg-border md:block lg:mx-12" />
             )}

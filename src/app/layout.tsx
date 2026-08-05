@@ -32,7 +32,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Tresto — Software & AI Studio",
+  title: "Tresto - Software & AI Studio",
   description:
     "Tresto is a Bangalore-based software and AI automation studio building custom web, Flutter apps, and automation pipelines.",
 };

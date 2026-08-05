@@ -26,7 +26,7 @@ export async function generateMetadata({ params }: CaseStudyPageProps): Promise<
   if (!caseStudy) return {};
 
   return {
-    title: `${caseStudy.title} — Tresto`,
+    title: `${caseStudy.title} - Tresto`,
     description: caseStudy.summary,
   };
 }

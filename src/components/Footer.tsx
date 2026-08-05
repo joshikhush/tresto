@@ -31,11 +31,11 @@ const columns: FooterColumn[] = [
   {
     title: "Work",
     links: [
-      { label: "HiveGuard", href: "/work#hiveguard" },
-      { label: "Triveni Radiators", href: "/work#triveni-radiators" },
-      { label: "Rotary Nagar", href: "/work#rotary-nagar" },
-      { label: "ReshapeNation", href: "/work#reshapenation" },
-      { label: "Manglam Homes", href: "/work#manglam-homes" },
+      { label: "Real Estate", href: "/work" },
+      { label: "Ride-Hailing", href: "/work" },
+      { label: "Industrial IoT", href: "/work" },
+      { label: "ERP", href: "/work" },
+      { label: "Manufacturing", href: "/work" },
     ],
   },
   // Connect column parked until real social URLs are confirmed with Hitesh

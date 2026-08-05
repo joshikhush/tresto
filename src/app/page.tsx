@@ -6,7 +6,7 @@ import { Values } from "@/components/sections/Values";
 import { Services } from "@/components/sections/Services";
 import { Cases } from "@/components/sections/Cases";
 import { WhoWeBuildFor } from "@/components/sections/WhoWeBuildFor";
-import { Testimonials } from "@/components/sections/Testimonials";
+// import { Testimonials } from "@/components/sections/Testimonials";
 import { DiscoveryCallCTA } from "@/components/sections/DiscoveryCallCTA";
 import { TechStack } from "@/components/sections/TechStack";
 import { FAQSection } from "@/components/sections/FAQSection";
@@ -23,7 +23,7 @@ export default function Home() {
       <Services />
       <Cases />
       <WhoWeBuildFor />
-      <Testimonials />
+      {/* <Testimonials /> */}
       <DiscoveryCallCTA />
       <TechStack />
       <FAQSection />

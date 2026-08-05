@@ -18,7 +18,7 @@ interface StatItem {
 }
 
 const stats: StatItem[] = [
-  { icon: Clock, value: 2, suffix: "", label: "Years of experience" },
+  { icon: Clock, value: 3, suffix: "+", label: "Years of experience" },
   { icon: Briefcase, value: 40, suffix: "+", label: "Projects delivered" },
   { icon: Smile, value: 25, suffix: "+", label: "Happy clients" },
   { icon: Layers, value: 3, suffix: "", label: "Platforms · Web·iOS·Android" },

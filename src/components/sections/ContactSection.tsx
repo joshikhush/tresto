@@ -36,7 +36,7 @@ interface ContactSectionProps {
 
 const DEFAULT_EYEBROW = "Contact";
 const DEFAULT_HEADLINE = "Let's discuss your project";
-const DEFAULT_LOCATIONS = ["Bangalore", "Mandi Dabwali"];
+const DEFAULT_LOCATIONS = ["Bangalore"];
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const MAGNETIC_TRANSITION = { duration: 0.15, ease: EASE };
