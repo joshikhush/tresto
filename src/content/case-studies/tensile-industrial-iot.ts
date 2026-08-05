@@ -10,7 +10,7 @@ export const tensileIndustrialIot: CaseStudy = {
   platform: 'iOS and Android',
   readTime: '6 min read',
 
-  heroImage: '/work/tensile-industrial-iot/hero.jpg',
+  heroImage: '/work/tensile-industrial-iot/hero.png',
 
   atAGlance: [
     { label: 'Sector', value: 'Industrial IoT' },
@@ -66,7 +66,7 @@ export const tensileIndustrialIot: CaseStudy = {
     heading: 'Three decisions, made in order',
     intro:
       'Most of the work sat in the gap between two things that were never meant to meet. Modbus expects a cable. Bluetooth is a radio. Here is how we closed that gap.',
-    image: '/work/tensile-industrial-iot/step-1.jpg',
+    image: '/work/tensile-industrial-iot/sticky.png',
     steps: [
       {
         title: 'We taught the app to speak Modbus itself',
