@@ -4,13 +4,15 @@
 // prop on this component (see spec); when finalized, add a display row
 // wherever the office locations live below.
 
-import { useRef, useState, type ChangeEvent, type FormEvent, type MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useState, type ChangeEvent, type MouseEvent as ReactMouseEvent } from "react";
 import { motion, animate, useMotionValue } from "framer-motion";
 import { Space_Grotesk } from "next/font/google";
 import { ArrowRight, CheckCircle2, MapPin, MessageCircle } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
+import { useContactForm } from "@/lib/useContactForm";
+import { HoneypotField } from "@/components/ui";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
@@ -18,19 +20,18 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--contact-font-display",
 });
 
-export interface ContactFormData {
+export type ContactFormData = {
   name: string;
   email: string;
   phone?: string;
   projectInfo: string;
   okWithWhatsapp: boolean;
-}
+};
 
 interface ContactSectionProps {
   eyebrow?: string;
   headline?: string;
   whatsappHref?: string;
-  onSubmit?: (data: ContactFormData) => void;
   locations?: string[];
 }
 
@@ -55,15 +56,16 @@ interface FloatingFieldProps {
   required?: boolean;
   multiline?: boolean;
   validate?: "email" | "nonEmpty";
+  error?: string;
   onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 }
 
-function FloatingField({ id, name, label, type = "text", value, required, multiline, validate, onChange }: FloatingFieldProps) {
+function FloatingField({ id, name, label, type = "text", value, required, multiline, validate, error, onChange }: FloatingFieldProps) {
   const [focused, setFocused] = useState(false);
   const [touched, setTouched] = useState(false);
   const floating = focused || value.length > 0;
   const isValid =
-    touched && value.length > 0
+    !error && touched && value.length > 0
       ? validate === "email"
         ? EMAIL_REGEX.test(value)
         : validate === "nonEmpty"
@@ -85,7 +87,12 @@ function FloatingField({ id, name, label, type = "text", value, required, multil
         : "top-1/2 -translate-y-1/2 text-[14.5px] text-[var(--contact-text-low)]"
   );
 
-  const borderClass = isValid === true ? "border-[var(--contact-green)]" : "border-[var(--contact-border)]";
+  const borderClass = error
+    ? "border-red"
+    : isValid === true
+      ? "border-[var(--contact-green)]"
+      : "border-[var(--contact-border)]";
+  const errorId = error ? `${id}-error` : undefined;
 
   return (
     <div className="relative">
@@ -100,6 +107,8 @@ function FloatingField({ id, name, label, type = "text", value, required, multil
           onBlur={handleBlur}
           required={required}
           aria-required={required || undefined}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={errorId}
           placeholder=" "
           className={cn(FIELD_BASE_CLASS, borderClass, "resize-none pb-3 pt-6")}
         />
@@ -114,6 +123,8 @@ function FloatingField({ id, name, label, type = "text", value, required, multil
           onBlur={handleBlur}
           required={required}
           aria-required={required || undefined}
+          aria-invalid={error ? true : undefined}
+          aria-describedby={errorId}
           placeholder=" "
           className={cn(FIELD_BASE_CLASS, borderClass, "h-[52px] pt-4", isValid === true && "pr-10")}
         />
@@ -126,6 +137,11 @@ function FloatingField({ id, name, label, type = "text", value, required, multil
           aria-hidden
           className={cn("absolute right-4 h-4 w-4 text-[var(--contact-green)]", multiline ? "top-4" : "top-1/2 -translate-y-1/2")}
         />
+      )}
+      {error && (
+        <p id={errorId} className="mt-1.5 text-xs text-red">
+          {error}
+        </p>
       )}
     </div>
   );
@@ -205,23 +221,24 @@ const initialForm: ContactFormData = {
 export function ContactSection({
   eyebrow = DEFAULT_EYEBROW,
   headline = DEFAULT_HEADLINE,
-  whatsappHref = "#",
-  onSubmit,
+  whatsappHref = "https://wa.me/919916668331",
   locations = DEFAULT_LOCATIONS,
 }: ContactSectionProps) {
-  const [form, setForm] = useState<ContactFormData>(initialForm);
   const reducedMotion = usePrefersReducedMotion();
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-    const checked = (e.target as HTMLInputElement).checked;
-    setForm((prev) => ({ ...prev, [name]: type === "checkbox" ? checked : value }));
-  };
-
-  const handleSubmit = (e: FormEvent) => {
-    e.preventDefault();
-    onSubmit?.(form);
-  };
+  const {
+    values: form,
+    errors,
+    status,
+    errorMessage,
+    botcheck,
+    handleChange,
+    handleBotcheckChange,
+    handleSubmit,
+  } = useContactForm<ContactFormData>({
+    initialValues: initialForm,
+    requiredFields: ["name", "email"],
+    emailField: "email",
+  });
 
   return (
     <section id="contact" className="relative overflow-hidden py-24">
@@ -242,56 +259,79 @@ export function ContactSection({
             {headline}
           </h2>
 
-          <form onSubmit={handleSubmit} className="mt-8 space-y-4">
-            <FloatingField
-              id="contact-name"
-              name="name"
-              label="Name"
-              value={form.name}
-              onChange={handleChange}
-              required
-              validate="nonEmpty"
-            />
-            <FloatingField
-              id="contact-email"
-              name="email"
-              label="Email"
-              type="email"
-              value={form.email}
-              onChange={handleChange}
-              required
-              validate="email"
-            />
-            <FloatingField
-              id="contact-phone"
-              name="phone"
-              label="Phone"
-              type="text"
-              value={form.phone ?? ""}
-              onChange={handleChange}
-            />
-            <FloatingField
-              id="contact-project-info"
-              name="projectInfo"
-              label="Project info"
-              value={form.projectInfo}
-              onChange={handleChange}
-              multiline
-            />
+          <div className="mt-8 space-y-4">
+            {status === "success" ? (
+              <div
+                role="status"
+                className="flex flex-col items-center gap-2 rounded-[14px] bg-emerald-bg px-4 py-8 text-center"
+              >
+                <CheckCircle2 className="h-6 w-6 text-emerald" aria-hidden />
+                <p className="text-sm font-semibold text-emerald">Thanks — we&apos;ll be in touch shortly.</p>
+              </div>
+            ) : (
+              <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                <HoneypotField value={botcheck} onChange={handleBotcheckChange} />
+                <FloatingField
+                  id="contact-name"
+                  name="name"
+                  label="Name"
+                  value={form.name}
+                  onChange={handleChange}
+                  required
+                  validate="nonEmpty"
+                  error={errors.name}
+                />
+                <FloatingField
+                  id="contact-email"
+                  name="email"
+                  label="Email"
+                  type="email"
+                  value={form.email}
+                  onChange={handleChange}
+                  required
+                  validate="email"
+                  error={errors.email}
+                />
+                <FloatingField
+                  id="contact-phone"
+                  name="phone"
+                  label="Phone"
+                  type="text"
+                  value={form.phone ?? ""}
+                  onChange={handleChange}
+                />
+                <FloatingField
+                  id="contact-project-info"
+                  name="projectInfo"
+                  label="Project info"
+                  value={form.projectInfo}
+                  onChange={handleChange}
+                  multiline
+                />
 
-            <label htmlFor="contact-whatsapp-optin" className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--contact-text-mid)]">
-              <input
-                id="contact-whatsapp-optin"
-                type="checkbox"
-                name="okWithWhatsapp"
-                checked={form.okWithWhatsapp}
-                onChange={handleChange}
-                className="h-4 w-4 shrink-0 rounded border-[var(--contact-border)] text-[var(--contact-indigo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
-              />
-              I&apos;m ok being contacted on WhatsApp
-            </label>
+                <label htmlFor="contact-whatsapp-optin" className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--contact-text-mid)]">
+                  <input
+                    id="contact-whatsapp-optin"
+                    type="checkbox"
+                    name="okWithWhatsapp"
+                    checked={form.okWithWhatsapp}
+                    onChange={handleChange}
+                    className="h-4 w-4 shrink-0 rounded border-[var(--contact-border)] text-[var(--contact-indigo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
+                  />
+                  I&apos;m ok being contacted on WhatsApp
+                </label>
 
-            <MagneticSubmitButton>Let&apos;s Connect</MagneticSubmitButton>
+                <MagneticSubmitButton disabled={status === "submitting"}>
+                  {status === "submitting" ? "Sending…" : "Let's Connect"}
+                </MagneticSubmitButton>
+
+                {status === "error" && (
+                  <p role="alert" className="rounded-[12px] bg-red-bg px-4 py-3 text-center text-sm text-red">
+                    {errorMessage}
+                  </p>
+                )}
+              </form>
+            )}
 
             <div className="flex items-center gap-3 pt-2">
               <span className="h-px flex-1 bg-[var(--contact-border)]" />
@@ -301,6 +341,8 @@ export function ContactSection({
 
             <a
               href={whatsappHref}
+              target="_blank"
+              rel="noopener noreferrer"
               className="mx-auto flex w-fit items-center justify-center gap-2 rounded-full border border-[var(--contact-indigo)] px-6 py-3 text-sm font-semibold text-[var(--contact-indigo)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--contact-indigo)] hover:text-white hover:shadow-[var(--contact-shadow-lift)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
             >
               <MessageCircle className="h-4 w-4" aria-hidden />
@@ -315,7 +357,7 @@ export function ContactSection({
                 </span>
               ))}
             </div>
-          </form>
+          </div>
         </motion.div>
       </div>
     </section>

@@ -8,3 +8,4 @@ export { Chip } from "./Chip";
 export { TodoBadge } from "./TodoBadge";
 export { GhostWord } from "./GhostWord";
 export { Reveal, useReveal, REVEAL_DELAY } from "./Reveal";
+export { HoneypotField } from "./HoneypotField";
