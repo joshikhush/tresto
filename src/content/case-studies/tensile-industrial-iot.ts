@@ -160,5 +160,5 @@ export const tensileIndustrialIot: CaseStudy = {
   },
 
   featured: true,
-  order: 10,
+  order: 30,
 }
