@@ -7,60 +7,61 @@ import { useMediaQuery } from "@/lib/useMediaQuery";
 
 interface TestimonialSlide {
   quote: string;
-  initials: string;
-  author: string;
   role: string;
-  tag: string;
-  metric: string;
 }
 
-// §3 honesty guardrails: these are explicit placeholders per spec, not real
-// clients. TODO(polish): swap for real client quotes/names once supplied.
 const testimonials: TestimonialSlide[] = [
   {
     quote:
-      "Tresto delivered ahead of schedule and kept us in the loop the whole way — the communication was the best part.",
-    initials: "SC",
-    author: "Sample Client",
-    role: "Founder · placeholder",
-    tag: "Website",
-    metric: "↑ Delivered 1 week early",
+      "What impressed me most about Tresto.io wasn't just their technical skills, it was how deeply they understood our business problem before proposing a solution. They genuinely cared about building the right product, not just completing the project. Their young, passionate team stayed committed from start to finish and delivered exactly what we envisioned.",
+    role: "Founder & CEO",
   },
   {
-    quote: "They were transparent about everything. We always knew exactly where the project stood.",
-    initials: "S2",
-    author: "Sample Client 2",
-    role: "Owner · placeholder",
-    tag: "Website",
-    metric: "100% scope transparency",
+    quote:
+      "Managing software projects becomes much easier when your development partner is proactive. The Tresto.io team took ownership, solved challenges quickly, and kept us informed throughout the project. Their focus on timely delivery and problem-solving made them an extension of our own team.",
+    role: "Project Manager",
   },
   {
-    quote: "Post-launch support has been genuinely helpful. They actually care about the long-term result.",
-    initials: "S3",
-    author: "Sample Client 3",
-    role: "CTO · placeholder",
-    tag: "Mobile App",
-    metric: "3+ months ongoing support",
+    quote:
+      "We've partnered with Tresto.io on multiple engagements, and they consistently bring energy, technical expertise, and a solution-first mindset. Their developers don't just write code, they understand the business context and work closely with everyone involved to ensure successful project completion.",
+    role: "Founder & CEO, second engagement",
+  },
+  {
+    quote:
+      "The team is incredibly approachable and always willing to go the extra mile. Whenever we faced roadblocks, they came back with practical solutions instead of excuses. Their passion for development and commitment to quality were evident throughout the engagement.",
+    role: "Product Owner",
+  },
+  {
+    quote:
+      "Tresto.io doesn't disappear after deployment. They continue to support, optimize, and improve the product whenever required. Having a reliable technology partner who truly stands behind their work gives us complete confidence.",
+    role: "Head of Operations",
   },
 ];
 
 const COUNT = testimonials.length;
+/** ~40vh of extra scroll per testimonial, plus one viewport to pin against. */
+const SECTION_HEIGHT_VH = COUNT * 40 + 100;
+/** Only 3 ambient gradients exist (.tst-ambient-0/1/2) — cycle through them for any count. */
+const AMBIENT_COUNT = 3;
 
 /**
- * S12 — Testimonials. Scroll-driven pinned stage: a 140vh outer section
- * holds a `position: sticky` inner stage; a rAF-throttled scroll handler
- * maps progress through that extra height to an active slide index `i`
- * plus `local` (0–1 progress within slide i). `i` drives React state
- * (`.tst-active` on both stacks + which ambient gradient shows) since it
- * only changes twice per full scroll-through. `local` drives the progress
- * segment widths via direct ref/style mutation instead of state — those
- * update on every rAF tick, and routing that through React would mean a
- * full re-render every frame during scroll.
+ * S12 — Testimonials. Scroll-driven pinned stage: an outer section (height
+ * scales with testimonial count — see SECTION_HEIGHT_VH) holds a
+ * `position: sticky` inner stage; a rAF-throttled scroll handler maps
+ * progress through that extra height to an active slide index `i` plus
+ * `local` (0–1 progress within slide i). `i` drives React state
+ * (`.tst-active` on both stacks + which ambient gradient shows, cycled
+ * modulo AMBIENT_COUNT) since it only changes twice per full scroll-through.
+ * `local` drives the progress segment widths via direct ref/style mutation
+ * instead of state — those update on every rAF tick, and routing that
+ * through React would mean a full re-render every frame during scroll.
  *
  * Falls back to a plain static stacked list (no pin, no transforms) below
  * 760px or under prefers-reduced-motion — a pure CSS override (see the
  * `@media` block around `.tst-*` in globals.css), not a JS-branched
- * render, so there's no server/client hydration mismatch.
+ * render, so there's no server/client hydration mismatch. The inline
+ * section-height style is skipped in that fallback too, so the CSS's own
+ * `height: auto` override isn't fought by a higher-precedence inline style.
  */
 export function Testimonials() {
   const sectionRef = useRef<HTMLElement>(null);
@@ -114,9 +115,13 @@ export function Testimonials() {
   }, [isFallback]);
 
   return (
-    <section className="tst-section" ref={sectionRef}>
+    <section
+      className="tst-section"
+      ref={sectionRef}
+      style={isFallback ? undefined : { height: `${SECTION_HEIGHT_VH}vh` }}
+    >
       <div className="tst-stage">
-        <div className={`tst-ambient tst-ambient-${activeIndex}`} />
+        <div className={`tst-ambient tst-ambient-${activeIndex % AMBIENT_COUNT}`} />
         <p className="tst-eyebrow" ref={eyebrowRef} style={eyebrowStyle}>
           Testimonials
         </p>
@@ -124,7 +129,7 @@ export function Testimonials() {
         <div className="tst-quote-stage">
           {testimonials.map((testimonial, index) => (
             <div
-              key={testimonial.author}
+              key={index}
               className={`tst-quote-slide${index === activeIndex ? " tst-active" : ""}`}
               /* Only meaningful in the fallback layout, where .tst-quote-stage
                  collapses via display:contents and this slide becomes a
@@ -143,26 +148,20 @@ export function Testimonials() {
         <div className="tst-meta-stage">
           {testimonials.map((testimonial, index) => (
             <div
-              key={testimonial.author}
+              key={index}
               className={`tst-meta-slide${index === activeIndex ? " tst-active" : ""}`}
               style={{ order: index * 2 + 1 }}
             >
               <div className="tst-glass">
-                <div className="tst-avatar">{testimonial.initials}</div>
-                <div>
-                  <div className="tst-name">{testimonial.author}</div>
-                  <div className="tst-role">{testimonial.role}</div>
-                </div>
+                <div className="tst-name">{testimonial.role}</div>
               </div>
-              <span className="tst-tag">{testimonial.tag}</span>
-              <span className="tst-metric">{testimonial.metric}</span>
             </div>
           ))}
         </div>
 
         <div className="tst-progress">
-          {testimonials.map((testimonial, index) => (
-            <div key={testimonial.author} className="tst-segment">
+          {testimonials.map((_, index) => (
+            <div key={index} className="tst-segment">
               <div
                 className="tst-segment-fill"
                 ref={(el) => {

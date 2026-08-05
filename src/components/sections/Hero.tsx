@@ -18,7 +18,7 @@ const hero: HeroContent = {
     "Flutter apps for iOS & Android",
     "AI/automation pipelines",
   ],
-  primaryCta: { label: "Start a Project", href: "/contact" },
+  primaryCta: { label: "Start a Project", href: "#contact" },
   secondaryCta: { label: "View Our Work", href: "/work" },
 };
 

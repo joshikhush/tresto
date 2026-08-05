@@ -34,7 +34,7 @@ export function Discovery() {
           </div>
 
           <div className="mt-8">
-            <Button variant="primary" href="/contact">
+            <Button variant="primary" href="#contact">
               Talk with an expert
             </Button>
           </div>
