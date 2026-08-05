@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter, Instrument_Serif } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, Instrument_Serif, JetBrains_Mono } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import "./globals.css";
@@ -23,6 +23,14 @@ const instrumentSerif = Instrument_Serif({
   style: ["italic"],
 });
 
+// Mono accent used only by the case-study detail design (src/components/work)
+// for step numbers, tech-stack initials, and the "at a glance" sidebar label.
+const jetbrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
+  subsets: ["latin"],
+  weight: ["400", "500"],
+});
+
 export const metadata: Metadata = {
   title: "Tresto — Software & AI Studio",
   description:
@@ -37,7 +45,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${plusJakartaSans.variable} ${inter.variable} ${instrumentSerif.variable}`}
+      className={`${plusJakartaSans.variable} ${inter.variable} ${instrumentSerif.variable} ${jetbrainsMono.variable}`}
     >
       <body className="min-h-screen bg-white font-body text-ink antialiased">
         <Navbar />

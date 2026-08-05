@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { animate, useInView } from "framer-motion";
 import { Briefcase, Clock, Layers, LifeBuoy, Smile, type LucideIcon } from "lucide-react";
-import { Section, SectionLabel, TodoBadge, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
+import { Section, SectionLabel, GhostWord, Reveal, REVEAL_DELAY } from "@/components/ui";
 import { cn } from "@/lib/cn";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
 
@@ -15,14 +15,12 @@ interface StatItem {
   /** Only used when `value` is null. */
   staticText?: string;
   label: string;
-  /** §3 honesty guardrails: flags a figure Hitesh hasn't confirmed yet. */
-  todo?: boolean;
 }
 
 const stats: StatItem[] = [
-  { icon: Clock, value: 2, suffix: "", label: "Years of experience", todo: true },
-  { icon: Briefcase, value: 40, suffix: "+", label: "Projects delivered", todo: true },
-  { icon: Smile, value: 25, suffix: "+", label: "Happy clients", todo: true },
+  { icon: Clock, value: 2, suffix: "", label: "Years of experience" },
+  { icon: Briefcase, value: 40, suffix: "+", label: "Projects delivered" },
+  { icon: Smile, value: 25, suffix: "+", label: "Happy clients" },
   { icon: Layers, value: 3, suffix: "", label: "Platforms · Web·iOS·Android" },
   { icon: LifeBuoy, value: null, suffix: "", staticText: "Ongoing", label: "Support" },
 ];
@@ -48,7 +46,7 @@ function dividerClasses(index: number) {
 }
 
 /** One inline stat column — counts up from 0 the first time it scrolls into view. */
-function StatColumn({ icon: Icon, value, suffix, staticText, label, todo, index }: StatItem & { index: number }) {
+function StatColumn({ icon: Icon, value, suffix, staticText, label, index }: StatItem & { index: number }) {
   const ref = useRef<HTMLParagraphElement>(null);
   const isInView = useInView(ref, { once: true, amount: 0.6 });
   const prefersReducedMotion = usePrefersReducedMotion();
@@ -75,7 +73,6 @@ function StatColumn({ icon: Icon, value, suffix, staticText, label, todo, index 
         {value === null ? staticText : `${display}${suffix}`}
       </p>
       <p className="mt-1 text-sm text-text-muted">{label}</p>
-      {todo && <TodoBadge className="mt-2">confirm number</TodoBadge>}
     </div>
   );
 }

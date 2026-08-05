@@ -973,3 +973,50 @@ html {
     animation: none;
   }
 }
+
+/* ===== Work / case-study detail pages — component-scoped design tokens =====
+   Ported from design-refs/design-final-updated.html. Same scoping pattern as
+   the Discovery/FAQ/Contact blocks above: a fully separate visual language
+   (own navy, own gold-text warning tone, own line colors) used only by
+   src/components/work/*, prefixed `--work-*` so it can't collide with (a)
+   --color-violet-mid / --color-violet-soft in the @theme block above, which
+   are DIFFERENT hex values than this design's own violet-mid/violet-soft,
+   and (b) the unrelated `.cs-*` classes above (S9 homepage case-study
+   teaser grid — a different component with a different design). */
+:root {
+  --work-violet: #5b21b6;
+  --work-violet-mid: #7c3aed;
+  --work-violet-soft: #f3effc;
+  --work-violet-edge: #ddd2f5;
+  --work-gold: #f5c518;
+  --work-gold-soft: #fef7e0;
+  --work-navy: #1a1a2e;
+  --work-navy-2: #242440;
+  --work-ink2: #4e4c63;
+  --work-ink3: #8e8da3;
+  --work-tint: #f7f6fb;
+  --work-line: #e9e7f2;
+  --work-line2: #d8d5e8;
+  --work-grad: linear-gradient(90deg, #5b21b6 0%, #7c3aed 45%, #f5c518 100%);
+}
+
+.work-grad-text {
+  background: var(--work-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.work-grad-bar {
+  background: var(--work-grad);
+}
+
+/* Sits behind every case-study image slot (hero, solution steps). Real
+   next/image is always rendered on top at full `fill` size — this only
+   shows through where the image hasn't loaded (path doesn't exist yet, or a
+   genuine 404 in production), so there's no runtime filesystem check and no
+   client-side error handling needed. Same tri-stop gradient as the source
+   design's generic `.ph` placeholder box. */
+.work-img-fallback {
+  background: linear-gradient(150deg, #ede7fa, #f7f6fb 50%, #fef7e0);
+}
