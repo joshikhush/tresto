@@ -455,10 +455,10 @@ html {
   background: #EDE9FE;
 }
 
-/* Bottom scrim, sized to its own content (not the full card) — sliding it
-   down 58% of that (much shorter) height tucks everything except the top
-   sliver — the tag chip + title — below the card's own overflow:hidden
-   clip, matching "only the chip + title peek" at rest. */
+/* Bottom scrim, sized to its own content (not the full card). The tag +
+   title always render in full — nothing clips them. Only cs-desc/cs-meta
+   collapse to zero height at rest (see below), so the overlay itself
+   naturally hugs "just the tag + title" until hover grows it. */
 .cs-overlay {
   position: absolute;
   left: 0;
@@ -466,11 +466,6 @@ html {
   bottom: 0;
   padding: 26px;
   background: linear-gradient(to top, rgba(26, 26, 46, .92) 30%, rgba(26, 26, 46, .55) 70%, transparent);
-  transform: translateY(58%);
-  transition: transform .5s cubic-bezier(.34, 1.45, .64, 1);
-}
-.cs-card:hover .cs-overlay {
-  transform: translateY(0);
 }
 
 .cs-tag {
@@ -497,26 +492,40 @@ html {
   color: #CBD5E1;
   font-size: 13px;
   line-height: 1.5;
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity .3s cubic-bezier(.34, 1.45, .64, 1), transform .3s cubic-bezier(.34, 1.45, .64, 1);
+  transition:
+    opacity .3s cubic-bezier(.34, 1.45, .64, 1),
+    transform .3s cubic-bezier(.34, 1.45, .64, 1),
+    max-height .3s cubic-bezier(.34, 1.45, .64, 1);
 }
 .cs-card:hover .cs-desc {
+  max-height: 90px;
   opacity: 1;
   transform: translateY(0);
   transition-delay: .06s;
 }
 
 .cs-meta {
-  margin-top: 14px;
+  margin-top: 0;
   display: flex;
   align-items: center;
   gap: 8px;
+  max-height: 0;
+  overflow: hidden;
   opacity: 0;
   transform: translateY(10px);
-  transition: opacity .3s cubic-bezier(.34, 1.45, .64, 1), transform .3s cubic-bezier(.34, 1.45, .64, 1);
+  transition:
+    opacity .3s cubic-bezier(.34, 1.45, .64, 1),
+    transform .3s cubic-bezier(.34, 1.45, .64, 1),
+    max-height .3s cubic-bezier(.34, 1.45, .64, 1),
+    margin-top .3s cubic-bezier(.34, 1.45, .64, 1);
 }
 .cs-card:hover .cs-meta {
+  margin-top: 14px;
+  max-height: 50px;
   opacity: 1;
   transform: translateY(0);
   transition-delay: .12s;
@@ -552,9 +561,8 @@ html {
 /* Mobile: no hover on touch, so the overlay/description/meta are just
    permanently in their "revealed" state instead of gated behind :hover. */
 @media (max-width: 700px) {
-  .cs-overlay { transform: translateY(0); }
-  .cs-desc,
-  .cs-meta { opacity: 1; transform: translateY(0); }
+  .cs-desc { opacity: 1; transform: translateY(0); max-height: 90px; }
+  .cs-meta { opacity: 1; transform: translateY(0); max-height: 50px; margin-top: 14px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
