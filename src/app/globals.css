@@ -921,6 +921,40 @@ html {
   }
 }
 
+/* Left-column detail rail — frosted glass so it reads against the mesh
+   (a flat near-white icon chip nearly disappeared against the mesh's
+   lightest patches). Solid rgba(255,255,255,0.92) is the base/fallback
+   for browsers without backdrop-filter support; the @supports block
+   layers the actual blur + lower opacity on top only where the browser
+   can render it. */
+.contact-detail-panel {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  border-radius: 20px;
+  padding: 28px;
+  box-shadow: 0 4px 24px -12px rgba(76, 29, 149, 0.18);
+}
+
+.contact-detail-icon-chip {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 8px rgba(76, 29, 149, 0.08);
+}
+
+@supports (backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px)) {
+  .contact-detail-panel {
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+  }
+
+  .contact-detail-icon-chip {
+    background: rgba(255, 255, 255, 0.72);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+}
+
 /* ===== Work / case-study detail pages — component-scoped design tokens =====
    Ported from design-refs/design-final-updated.html. Same scoping pattern as
    the Discovery/FAQ/Contact blocks above: a fully separate visual language

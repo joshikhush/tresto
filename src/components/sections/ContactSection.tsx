@@ -1,13 +1,9 @@
 "use client";
 
-// TODO: contact email and phone not yet confirmed — deliberately not a
-// prop on this component (see spec); when finalized, add a display row
-// wherever the office locations live below.
-
-import { useRef, useState, type ChangeEvent, type MouseEvent as ReactMouseEvent } from "react";
+import { useRef, useState, type ChangeEvent, type MouseEvent as ReactMouseEvent, type ReactNode } from "react";
 import { motion, animate, useMotionValue } from "framer-motion";
 import { Space_Grotesk } from "next/font/google";
-import { ArrowRight, CheckCircle2, MapPin, MessageCircle } from "lucide-react";
+import { ArrowRight, CheckCircle2, Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { useMediaQuery } from "@/lib/useMediaQuery";
 import { usePrefersReducedMotion } from "@/lib/usePrefersReducedMotion";
@@ -32,12 +28,12 @@ interface ContactSectionProps {
   eyebrow?: string;
   headline?: string;
   whatsappHref?: string;
-  locations?: string[];
 }
 
 const DEFAULT_EYEBROW = "Contact";
 const DEFAULT_HEADLINE = "Let's discuss your project";
-const DEFAULT_LOCATIONS = ["Bangalore"];
+const DEFAULT_SUPPORTING_LINE =
+  "Fill in the form and we'll get back to you shortly, or reach out directly using the details below.";
 
 const EASE: [number, number, number, number] = [0.16, 1, 0.3, 1];
 const MAGNETIC_TRANSITION = { duration: 0.15, ease: EASE };
@@ -147,6 +143,30 @@ function FloatingField({ id, name, label, type = "text", value, required, multil
   );
 }
 
+interface ContactDetailRowProps {
+  icon: ReactNode;
+  label: string;
+  children: ReactNode;
+}
+
+function ContactDetailRow({ icon, label, children }: ContactDetailRowProps) {
+  return (
+    <div className="flex items-start gap-3">
+      <span className="contact-detail-icon-chip flex h-[38px] w-[38px] shrink-0 items-center justify-center rounded-[11px] text-[var(--contact-indigo)]">
+        {icon}
+      </span>
+      <div className="pt-0.5">
+        <p className="font-mono text-[10px] uppercase tracking-[0.11em] text-[var(--contact-text-mid)]">
+          {label}
+        </p>
+        <div className="mt-1 text-[14.5px] font-medium leading-[1.6] text-[var(--contact-text-hi)]">
+          {children}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 interface MagneticButtonProps {
   children: React.ReactNode;
   disabled?: boolean;
@@ -207,10 +227,12 @@ const initialForm: ContactFormData = {
 };
 
 /**
- * S17 — Contact. Full redesign: a single centered card (max-width 460px)
- * floating over an animated gradient mesh, replacing the old two-column
- * "locations + form" layout. Content/field wording is unchanged from the
- * current site — only the visual system and interaction are new.
+ * S17 — Contact. Two-column layout: a left column (eyebrow, headline,
+ * supporting line, contact detail rows) sitting directly on the animated
+ * gradient mesh, and a right column holding the form inside the existing
+ * white card. Below `md` the grid collapses to a single stacked column,
+ * left content first. Content/field wording is unchanged from the current
+ * site — only the layout is new.
  *
  * Deviates from the spec on one point: it says the headline should be an
  * `h1`, but Hero.tsx already renders the page's one `h1` — a second `h1`
@@ -222,7 +244,6 @@ export function ContactSection({
   eyebrow = DEFAULT_EYEBROW,
   headline = DEFAULT_HEADLINE,
   whatsappHref = "https://wa.me/919916668331",
-  locations = DEFAULT_LOCATIONS,
 }: ContactSectionProps) {
   const reducedMotion = usePrefersReducedMotion();
   const {
@@ -244,121 +265,152 @@ export function ContactSection({
     <section id="contact" className="relative overflow-hidden py-24">
       <div aria-hidden className="contact-mesh absolute inset-0" />
 
-      <div className="relative z-10 mx-auto flex max-w-[1200px] justify-center px-6">
-        <motion.div
-          initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
-          whileInView={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
-          viewport={{ once: true, amount: 0.4 }}
-          transition={{ duration: 0.8, ease: EASE }}
-          className={`${spaceGrotesk.variable} w-full max-w-[460px] rounded-[24px] border border-[var(--contact-border)] bg-[var(--contact-bg-card)] px-6 py-10 shadow-[var(--contact-shadow-rest)] sm:px-10`}
-        >
-          <p className="text-center text-xs font-semibold uppercase tracking-[0.14em] text-[var(--contact-indigo)]">
-            {eyebrow}
-          </p>
-          <h2 className="mt-2 text-center font-[family-name:var(--contact-font-display)] text-[26px] font-bold leading-tight text-[var(--contact-text-hi)]">
-            {headline}
-          </h2>
+      <div className={`${spaceGrotesk.variable} relative z-10 mx-auto max-w-[1200px] px-6`}>
+        <div className="grid items-start gap-x-[56px] gap-y-12 md:grid-cols-[0.85fr_1fr]">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--contact-indigo)]">
+              {eyebrow}
+            </p>
+            <h2 className="mt-2 font-[family-name:var(--contact-font-display)] text-[26px] font-bold leading-tight text-[var(--contact-text-hi)]">
+              {headline}
+            </h2>
+            <p className="mt-4 max-w-md text-[15px] leading-relaxed text-[var(--contact-text-mid)]">
+              {DEFAULT_SUPPORTING_LINE}
+            </p>
 
-          <div className="mt-8 space-y-4">
-            {status === "success" ? (
-              <div
-                role="status"
-                className="flex flex-col items-center gap-2 rounded-[14px] bg-emerald-bg px-4 py-8 text-center"
-              >
-                <CheckCircle2 className="h-6 w-6 text-emerald" aria-hidden />
-                <p className="text-sm font-semibold text-emerald">Thanks — we&apos;ll be in touch shortly.</p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} noValidate className="space-y-4">
-                <HoneypotField value={botcheck} onChange={handleBotcheckChange} />
-                <FloatingField
-                  id="contact-name"
-                  name="name"
-                  label="Name"
-                  value={form.name}
-                  onChange={handleChange}
-                  required
-                  validate="nonEmpty"
-                  error={errors.name}
-                />
-                <FloatingField
-                  id="contact-email"
-                  name="email"
-                  label="Email"
-                  type="email"
-                  value={form.email}
-                  onChange={handleChange}
-                  required
-                  validate="email"
-                  error={errors.email}
-                />
-                <FloatingField
-                  id="contact-phone"
-                  name="phone"
-                  label="Phone"
-                  type="text"
-                  value={form.phone ?? ""}
-                  onChange={handleChange}
-                />
-                <FloatingField
-                  id="contact-project-info"
-                  name="projectInfo"
-                  label="Project info"
-                  value={form.projectInfo}
-                  onChange={handleChange}
-                  multiline
-                />
+            <div className="contact-detail-panel mt-10 space-y-7">
+              <ContactDetailRow icon={<Mail className="h-4 w-4" aria-hidden />} label="Email">
+                <a
+                  href="mailto:hitesh.mehta638@gmail.com"
+                  className="font-semibold text-[var(--contact-indigo)] hover:underline"
+                >
+                  hitesh.mehta638@gmail.com
+                </a>
+              </ContactDetailRow>
 
-                <label htmlFor="contact-whatsapp-optin" className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--contact-text-mid)]">
-                  <input
-                    id="contact-whatsapp-optin"
-                    type="checkbox"
-                    name="okWithWhatsapp"
-                    checked={form.okWithWhatsapp}
-                    onChange={handleChange}
-                    className="h-4 w-4 shrink-0 rounded border-[var(--contact-border)] text-[var(--contact-indigo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
-                  />
-                  I&apos;m ok being contacted on WhatsApp
-                </label>
+              <ContactDetailRow icon={<Phone className="h-4 w-4" aria-hidden />} label="Phone">
+                <a
+                  href="tel:+919916668331"
+                  className="font-semibold text-[var(--contact-indigo)] hover:underline"
+                >
+                  +91 99166 68331
+                </a>
+                <p className="mt-1 text-[13px] font-normal leading-[1.6] text-[var(--contact-text-mid)]">
+                  WhatsApp on the same number
+                </p>
+              </ContactDetailRow>
 
-                <MagneticSubmitButton disabled={status === "submitting"}>
-                  {status === "submitting" ? "Sending…" : "Let's Connect"}
-                </MagneticSubmitButton>
-
-                {status === "error" && (
-                  <p role="alert" className="rounded-[12px] bg-red-bg px-4 py-3 text-center text-sm text-red">
-                    {errorMessage}
-                  </p>
-                )}
-              </form>
-            )}
-
-            <div className="flex items-center gap-3 pt-2">
-              <span className="h-px flex-1 bg-[var(--contact-border)]" />
-              <span className="text-xs uppercase tracking-wide text-[var(--contact-text-low)]">or</span>
-              <span className="h-px flex-1 bg-[var(--contact-border)]" />
-            </div>
-
-            <a
-              href={whatsappHref}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mx-auto flex w-fit items-center justify-center gap-2 rounded-full border border-[var(--contact-indigo)] px-6 py-3 text-sm font-semibold text-[var(--contact-indigo)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--contact-indigo)] hover:text-white hover:shadow-[var(--contact-shadow-lift)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
-            >
-              <MessageCircle className="h-4 w-4" aria-hidden />
-              Message us on WhatsApp
-            </a>
-
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 pt-2 text-xs text-[var(--contact-text-low)]">
-              {locations.map((location) => (
-                <span key={location} className="flex items-center gap-1.5">
-                  <MapPin className="h-3 w-3" aria-hidden />
-                  {location}
-                </span>
-              ))}
+              <ContactDetailRow icon={<MapPin className="h-4 w-4" aria-hidden />} label="Registered office">
+                <p>United Growth, House No. 520</p>
+                <p className="mt-1 text-[13px] font-normal leading-[1.6] text-[var(--contact-text-mid)]">
+                  Rajeev Nagar, Mandi Dabwali
+                </p>
+                <p className="text-[13px] font-normal leading-[1.6] text-[var(--contact-text-mid)]">
+                  Sirsa, Haryana 125104
+                </p>
+              </ContactDetailRow>
             </div>
           </div>
-        </motion.div>
+
+          <motion.div
+            initial={reducedMotion ? { opacity: 0 } : { opacity: 0, y: 24, scale: 0.98 }}
+            whileInView={reducedMotion ? { opacity: 1 } : { opacity: 1, y: 0, scale: 1 }}
+            viewport={{ once: true, amount: 0.4 }}
+            transition={{ duration: 0.8, ease: EASE }}
+            className="w-full rounded-[24px] border border-[var(--contact-border)] bg-[var(--contact-bg-card)] px-6 py-10 shadow-[var(--contact-shadow-rest)] sm:px-10"
+          >
+            <div className="space-y-4">
+              {status === "success" ? (
+                <div
+                  role="status"
+                  className="flex flex-col items-center gap-2 rounded-[14px] bg-emerald-bg px-4 py-8 text-center"
+                >
+                  <CheckCircle2 className="h-6 w-6 text-emerald" aria-hidden />
+                  <p className="text-sm font-semibold text-emerald">Thanks — we&apos;ll be in touch shortly.</p>
+                </div>
+              ) : (
+                <form onSubmit={handleSubmit} noValidate className="space-y-4">
+                  <HoneypotField value={botcheck} onChange={handleBotcheckChange} />
+                  <FloatingField
+                    id="contact-name"
+                    name="name"
+                    label="Name"
+                    value={form.name}
+                    onChange={handleChange}
+                    required
+                    validate="nonEmpty"
+                    error={errors.name}
+                  />
+                  <FloatingField
+                    id="contact-email"
+                    name="email"
+                    label="Email"
+                    type="email"
+                    value={form.email}
+                    onChange={handleChange}
+                    required
+                    validate="email"
+                    error={errors.email}
+                  />
+                  <FloatingField
+                    id="contact-phone"
+                    name="phone"
+                    label="Phone"
+                    type="text"
+                    value={form.phone ?? ""}
+                    onChange={handleChange}
+                  />
+                  <FloatingField
+                    id="contact-project-info"
+                    name="projectInfo"
+                    label="Project info"
+                    value={form.projectInfo}
+                    onChange={handleChange}
+                    multiline
+                  />
+
+                  <label htmlFor="contact-whatsapp-optin" className="flex cursor-pointer items-center gap-2.5 text-sm text-[var(--contact-text-mid)]">
+                    <input
+                      id="contact-whatsapp-optin"
+                      type="checkbox"
+                      name="okWithWhatsapp"
+                      checked={form.okWithWhatsapp}
+                      onChange={handleChange}
+                      className="h-4 w-4 shrink-0 rounded border-[var(--contact-border)] text-[var(--contact-indigo)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
+                    />
+                    I&apos;m ok being contacted on WhatsApp
+                  </label>
+
+                  <MagneticSubmitButton disabled={status === "submitting"}>
+                    {status === "submitting" ? "Sending…" : "Let's Connect"}
+                  </MagneticSubmitButton>
+
+                  {status === "error" && (
+                    <p role="alert" className="rounded-[12px] bg-red-bg px-4 py-3 text-center text-sm text-red">
+                      {errorMessage}
+                    </p>
+                  )}
+                </form>
+              )}
+
+              <div className="flex items-center gap-3 pt-2">
+                <span className="h-px flex-1 bg-[var(--contact-border)]" />
+                <span className="text-xs uppercase tracking-wide text-[var(--contact-text-low)]">or</span>
+                <span className="h-px flex-1 bg-[var(--contact-border)]" />
+              </div>
+
+              <a
+                href={whatsappHref}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mx-auto flex w-fit items-center justify-center gap-2 rounded-full border border-[var(--contact-indigo)] px-6 py-3 text-sm font-semibold text-[var(--contact-indigo)] transition-all duration-300 hover:-translate-y-0.5 hover:bg-[var(--contact-indigo)] hover:text-white hover:shadow-[var(--contact-shadow-lift)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--contact-indigo)] focus-visible:ring-offset-2"
+              >
+                <MessageCircle className="h-4 w-4" aria-hidden />
+                Message us on WhatsApp
+              </a>
+            </div>
+          </motion.div>
+        </div>
       </div>
     </section>
   );

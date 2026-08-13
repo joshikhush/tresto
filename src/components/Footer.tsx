@@ -38,6 +38,13 @@ const columns: FooterColumn[] = [
       { label: "Manufacturing", href: "/work" },
     ],
   },
+  {
+    title: "Get in touch",
+    links: [
+      { label: "hitesh.mehta638@gmail.com", href: "mailto:hitesh.mehta638@gmail.com" },
+      { label: "+91 99166 68331", href: "tel:+919916668331" },
+    ],
+  },
   // Connect column parked until real social URLs are confirmed with Hitesh
   // (was all-`#` placeholder links).
   // {
@@ -87,13 +94,23 @@ export function Footer() {
       />
 
       <div className="relative z-10">
-        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr]">
+        <div className="grid gap-12 md:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
           <Reveal delay={REVEAL_DELAY.eyebrow}>
             <div>
               <Logo />
               <p className="mt-4 max-w-xs text-sm text-text-muted">
                 Trust First. Technology Always.
               </p>
+              <div className="mt-4 max-w-xs border-t border-border-light pt-3.5">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.06em] text-text-faint">
+                  Registered office
+                </p>
+                <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
+                  United Growth, House No. 520, Rajeev Nagar,
+                  <br />
+                  Mandi Dabwali, Sirsa, Haryana 125104, India
+                </p>
+              </div>
               {/* Social icon row parked until real profile URLs are confirmed — see `socials` above. */}
               {/* <div className="mt-6 flex items-center gap-4">
                 {socials.map(({ label, href, Icon }) => (
