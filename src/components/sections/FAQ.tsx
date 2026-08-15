@@ -10,37 +10,37 @@ const faqs: FAQItem[] = [
     id: "timeline",
     question: "How long does a typical project take?",
     answer:
-      "Timelines depend on scope — we'll walk through a realistic estimate on the discovery call.",
+      "Timelines depend on scope. We'll walk through a realistic estimate on the discovery call.",
   },
   {
     id: "pricing",
     question: "How do you price projects?",
     answer:
-      "We scope each project individually — fixed-price for well-defined builds, retainer for ongoing work. You'll get a clear quote before anything starts.",
+      "We scope each project individually: fixed-price for well-defined builds, retainer for ongoing work. You'll get a clear quote before anything starts.",
   },
   {
     id: "support",
     question: "What happens after launch?",
     answer:
-      "We offer ongoing support and maintenance after launch — bug fixes, monitoring and updates, not just a handover.",
+      "We offer ongoing support and maintenance after launch: bug fixes, monitoring and updates, not just a handover.",
   },
   {
     id: "tech",
     question: "What technologies do you build with?",
     answer:
-      "Mainly Next.js/React and Node.js for web, Flutter for mobile — see our Tech Stack section below for specifics.",
+      "Mainly Next.js/React and Node.js for web, Flutter for mobile. See our Tech Stack section below for specifics.",
   },
   {
     id: "existing-codebase",
     question: "Can you work with our existing codebase?",
     answer:
-      "Yes — we regularly pick up existing codebases. We start with a short audit so we understand what's there before making changes.",
+      "Yes, we regularly pick up existing codebases. We start with a short audit so we understand what's there before making changes.",
   },
   {
     id: "getting-started",
     question: "How do we get started?",
     answer:
-      "Book a free discovery call — we'll talk through your goals and follow up with a scoped proposal.",
+      "Book a free discovery call. We'll talk through your goals and follow up with a scoped proposal.",
   },
 ];
 

@@ -326,7 +326,7 @@ export function ContactSection({
                   className="flex flex-col items-center gap-2 rounded-[14px] bg-emerald-bg px-4 py-8 text-center"
                 >
                   <CheckCircle2 className="h-6 w-6 text-emerald" aria-hidden />
-                  <p className="text-sm font-semibold text-emerald">Thanks — we&apos;ll be in touch shortly.</p>
+                  <p className="text-sm font-semibold text-emerald">Thanks! We&apos;ll be in touch shortly.</p>
                 </div>
               ) : (
                 <form onSubmit={handleSubmit} noValidate className="space-y-4">

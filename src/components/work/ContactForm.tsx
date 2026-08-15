@@ -119,7 +119,7 @@ export function ContactForm() {
               className="flex flex-col items-center justify-center gap-2 rounded-[18px] border border-[var(--work-line)] bg-[var(--work-tint)] p-8 text-center"
             >
               <CheckCircle2 className="h-6 w-6 text-emerald" aria-hidden />
-              <p className="text-sm font-semibold text-emerald">Thanks — we&apos;ll be in touch shortly.</p>
+              <p className="text-sm font-semibold text-emerald">Thanks! We&apos;ll be in touch shortly.</p>
             </div>
           ) : (
             <form
