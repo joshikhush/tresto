@@ -145,18 +145,6 @@ export function Navbar() {
         >
           <div className="flex items-center gap-3">
             <Logo variant="dark" />
-            <span
-              title="Available for projects"
-              aria-label="Available for projects"
-              className="relative hidden h-[7px] w-[7px] shrink-0 rounded-full bg-emerald shadow-[0_0_10px_var(--color-emerald)] sm:inline-block"
-            >
-              {!prefersReducedMotion && (
-                <span
-                  aria-hidden
-                  className="absolute inset-0 rounded-full bg-emerald animate-status-pulse"
-                />
-              )}
-            </span>
           </div>
 
           <nav

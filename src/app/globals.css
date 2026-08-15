@@ -222,19 +222,6 @@ html {
     }
   }
 
-  /* Navbar "available for projects" status dot (S2) — plain opacity pulse,
-     dropped entirely under prefers-reduced-motion (Navbar.tsx doesn't
-     render this inner span at all in that case, leaving a static dot). */
-  @keyframes status-pulse {
-    50% {
-      opacity: 0.4;
-    }
-  }
-
-  .animate-status-pulse {
-    animation: status-pulse 2s ease-in-out infinite;
-  }
-
   /* Animated violet→gold ring on card hover — shared by the Values grid
      (S7, rounded cards) and the Services scroll-stack (S8, sharp
      corners): `border-radius: inherit` picks up whichever the card
