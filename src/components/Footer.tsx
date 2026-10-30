@@ -32,7 +32,6 @@ const columns: FooterColumn[] = [
     title: "Work",
     links: [
       { label: "Real Estate", href: "/work" },
-      { label: "Ride-Hailing", href: "/work" },
       { label: "Industrial IoT", href: "/work" },
       { label: "ERP", href: "/work" },
       { label: "Manufacturing", href: "/work" },
