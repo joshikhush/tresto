@@ -105,7 +105,7 @@ export function Footer() {
                   Registered office
                 </p>
                 <p className="mt-1.5 text-xs leading-relaxed text-text-muted">
-                  United Growth, House No. 520, Rajeev Nagar,
+                  TRESTO.IO (Proprietorship), House No. 520, Rajeev Nagar,
                   <br />
                   Mandi Dabwali, Sirsa, Haryana 125104, India
                 </p>

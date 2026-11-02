@@ -301,7 +301,7 @@ export function ContactSection({
               </ContactDetailRow>
 
               <ContactDetailRow icon={<MapPin className="h-4 w-4" aria-hidden />} label="Registered office">
-                <p>United Growth, House No. 520</p>
+                <p>TRESTO.IO (Proprietorship), House No. 520</p>
                 <p className="mt-1 text-[13px] font-normal leading-[1.6] text-[var(--contact-text-mid)]">
                   Rajeev Nagar, Mandi Dabwali
                 </p>
